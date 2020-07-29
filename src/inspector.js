@@ -9,7 +9,7 @@ import {
 	ToggleControl,
 	TextareaControl,
 	RangeControl,
-} from "@wordpress/element";
+} from "@wordpress/components";
 
 /**
  * Internal depencencies
@@ -58,8 +58,6 @@ const Inspector = ({
 		fontFamily,
 		displayDate,
 	} = attributes;
-
-	return <h1>Hi</h1>;
 
 	const withHoverColor = {
 		label: "Hover Color",
@@ -129,6 +127,7 @@ const Inspector = ({
 					label={__("Access Token")}
 					value={token}
 					onChange={(token) => {
+						console.log("token");
 						setAttributes({ token });
 						getPhotos(numberOfImages, token);
 					}}
