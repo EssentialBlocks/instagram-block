@@ -1,0 +1,11 @@
+{
+	"name": "block/instagram-feed-block",
+	"title": "Instagram Feed Block",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Showcase Instagram posts for your web visitors ",
+	"textdomain": "instagram-feed-block",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
