@@ -3,8 +3,7 @@ import { __ } from "@wordpress/i18n";
 
 import "./style.scss";
 import Edit from "./edit";
-import save from "./save";
-import icon from "./icon";
+import { InstagramIcon } from "./icons";
 import attributes from "./attributes";
 
 registerBlockType("block/instagram-feed-block", {
@@ -14,8 +13,8 @@ registerBlockType("block/instagram-feed-block", {
 		"instagram-feed-block"
 	),
 	category: "widgets",
-	icon,
+	icon: InstagramIcon,
 	attributes,
 	edit: Edit,
-	save,
+	save: () => null,
 });

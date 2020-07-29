@@ -35,14 +35,6 @@ function create_block_instagram_feed_block_block_init() {
 		$script_asset['version']
 	);
 
-	$editor_css = 'build/index.css';
-	wp_register_style(
-		'create-block-instagram-feed-block-block-editor',
-		plugins_url( $editor_css, __FILE__ ),
-		array(),
-		filemtime( "$dir/$editor_css" )
-	);
-
 	$style_css = 'build/style-index.css';
 	wp_register_style(
 		'create-block-instagram-feed-block-block',
@@ -54,7 +46,6 @@ function create_block_instagram_feed_block_block_init() {
 	if( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/instagram-feed' ) ) {
     register_block_type( 'block/instagram-feed-block', array(
       'editor_script' => 'create-block-instagram-feed-block-block-editor',
-      'editor_style'  => 'create-block-instagram-feed-block-block-editor',
       'style'         => 'create-block-instagram-feed-block-block',
     ) );
   }
