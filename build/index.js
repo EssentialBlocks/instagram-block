@@ -170,6 +170,129 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/attributes.js":
+/*!***************************!*\
+  !*** ./src/attributes.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var attributes = {
+  token: {
+    type: "string",
+    default: ""
+  },
+  columns: {
+    type: "string",
+    default: 4
+  },
+  numberOfImages: {
+    type: "number",
+    default: 4
+  },
+  imageSpace: {
+    type: "number"
+  },
+  thumbs: {
+    type: "array",
+    default: []
+  },
+  profile: {
+    type: "array",
+    default: []
+  },
+  displayProfile: {
+    type: "boolean",
+    default: false
+  },
+  backgroundColor: {
+    type: "string",
+    defualt: "tranaparent"
+  },
+  addHover: {
+    type: "boolean",
+    default: true
+  },
+  hoverColor: {
+    type: "string"
+  },
+  hoverImageID: {
+    type: "string"
+  },
+  hoverOpacity: {
+    type: "number",
+    default: 0.5
+  },
+  displayLike: {
+    type: "boolean",
+    default: true
+  },
+  likeColor: {
+    type: "string",
+    default: "#000000"
+  },
+  displayComment: {
+    type: "boolean",
+    default: true
+  },
+  commentColor: {
+    type: "string",
+    default: "#000000"
+  },
+  sortBy: {
+    type: "string",
+    default: "most_recent"
+  },
+  nameColor: {
+    type: "string",
+    default: "#000000"
+  },
+  detailsColor: {
+    type: "string",
+    default: "#000000"
+  },
+  nameFontSize: {
+    type: "number",
+    default: 36
+  },
+  nameSizeUnit: {
+    type: "string",
+    default: "px"
+  },
+  detailsFontSize: {
+    type: "number",
+    default: 18
+  },
+  detailsSizeUnit: {
+    type: "string",
+    default: "px"
+  },
+  borderRadius: {
+    type: "number",
+    default: 0
+  },
+  selectedStyle: {
+    type: "string",
+    default: "basic"
+  },
+  fontFamily: {
+    type: "string"
+  },
+  displayDate: {
+    type: "boolean",
+    default: true
+  },
+  preview: {
+    type: "boolean",
+    default: false
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (attributes);
+
+/***/ }),
+
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -327,6 +450,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
 /* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./save */ "./src/save.js");
 /* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./icon */ "./src/icon.js");
+/* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./attributes */ "./src/attributes.js");
+
 
 
 
@@ -338,6 +463,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("blo
   description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])("Showcase Instagram posts for your web visitors", "instagram-feed-block"),
   category: "widgets",
   icon: _icon__WEBPACK_IMPORTED_MODULE_5__["default"],
+  attributes: _attributes__WEBPACK_IMPORTED_MODULE_6__["default"],
   edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
   save: _save__WEBPACK_IMPORTED_MODULE_4__["default"]
 });
