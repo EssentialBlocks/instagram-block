@@ -1,8 +1,6 @@
 const attributes = {
 	token: {
 		type: "string",
-		default:
-			"IGQVJYNzI5NkZAXb2xyTGZAJZAnBIOTRZAblUyUVlsbDJCRWtVTk94Ti1UVXRWOUFaYmJjaUtRcjAwODNZAa3JoSjExY0RBdmxvM01pUlB2M1NwTmlyeHVwUHNsU195UlRiaUJYNTZABUHFfWE1rWER5MlZA6QgZDZD",
 	},
 	columns: {
 		type: "string",
@@ -26,10 +24,6 @@ const attributes = {
 	borderRadius: {
 		type: "number",
 		default: 0,
-	},
-	selectedStyle: {
-		type: "string",
-		default: "basic",
 	},
 	preview: {
 		type: "boolean",

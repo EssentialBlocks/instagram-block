@@ -34,18 +34,21 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 		fetchBio();
 	}, []);
 
-	const fetchPhotos = (count) => {
-		const _COUNT = count ? count : numberOfImages;
+	const fetchPhotos = () => {
+		const TOKEN = token || "";
 
-		if (!token) {
+		if (!TOKEN) {
 			return false;
 		}
 
 		return fetch(
-			`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${token}`
+			`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${TOKEN}`
 		)
 			.then((res) => res.json())
 			.then((json) => {
+				if (json.error) {
+					setErrorMessage(json.error.message);
+				}
 				if (json.data) {
 					setResponseCode(200);
 					setLoading(false);
@@ -76,16 +79,6 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 					setAttributes({ profile: [] });
 				}
 			});
-	};
-
-	const onChangeToken = (token) => {
-		setAttributes({ token });
-		fetchPhotos(numberOfImages);
-	};
-
-	const onChangeImages = (numberOfImages) => {
-		setAttributes({ numberOfImages });
-		fetchPhotos(numberOfImages);
 	};
 
 	let container;
@@ -150,7 +143,7 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 				<p>To get started please add an Instagram Access Token. </p>
 				<p>
 					To do this we suggest installing the Feed Them Social plugin by Slick
-					Remix,{" "}
+					Remix,
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
@@ -160,8 +153,8 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 					</a>
 				</p>
 				<p>
-					Once you have a token, please paste it into the 'Instagram Access
-					Token' setting.
+					Once you have a token, please paste it into the 'Access Token'
+					setting.
 				</p>
 				<p>You can then deactivate the FTS plugin if needed.</p>
 			</div>
@@ -177,7 +170,6 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 			/>
 		),
 
-		//Edit view here
 		<div>{container}</div>,
 	];
 };

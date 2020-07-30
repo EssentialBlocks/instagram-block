@@ -181,8 +181,7 @@
 __webpack_require__.r(__webpack_exports__);
 var attributes = {
   token: {
-    type: "string",
-    "default": "IGQVJYNzI5NkZAXb2xyTGZAJZAnBIOTRZAblUyUVlsbDJCRWtVTk94Ti1UVXRWOUFaYmJjaUtRcjAwODNZAa3JoSjExY0RBdmxvM01pUlB2M1NwTmlyeHVwUHNsU195UlRiaUJYNTZABUHFfWE1rWER5MlZA6QgZDZD"
+    type: "string"
   },
   columns: {
     type: "string",
@@ -207,10 +206,6 @@ var attributes = {
     type: "number",
     "default": 0
   },
-  selectedStyle: {
-    type: "string",
-    "default": "basic"
-  },
   preview: {
     type: "boolean",
     "default": false
@@ -221,66 +216,6 @@ var attributes = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (attributes);
-
-/***/ }),
-
-/***/ "./src/constants.js":
-/*!**************************!*\
-  !*** ./src/constants.js ***!
-  \**************************/
-/*! exports provided: DEFAULT_HOVER_COLOR, SORT_OPTIONS, FONT_SIZE_UNIT, STYLES */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_HOVER_COLOR", function() { return DEFAULT_HOVER_COLOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SORT_OPTIONS", function() { return SORT_OPTIONS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FONT_SIZE_UNIT", function() { return FONT_SIZE_UNIT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STYLES", function() { return STYLES; });
-var __ = wp.i18n.__;
-var DEFAULT_HOVER_COLOR = "#7967ff";
-var SORT_OPTIONS = [{
-  label: __("Most Recent"),
-  value: "most_recent"
-}, {
-  label: __("Least Recent"),
-  value: "least_recent"
-}, {
-  label: __("Most Liked"),
-  value: "most_liked"
-}, {
-  label: __("Least Liked"),
-  value: "least_liked"
-}, {
-  label: __("Most Commented"),
-  value: "most_commented"
-}, {
-  label: __("Least Commented"),
-  value: "least_commented"
-}];
-var FONT_SIZE_UNIT = [{
-  label: "px",
-  value: "px"
-}, {
-  label: "%",
-  value: "%"
-}, {
-  label: "em",
-  value: "em"
-}];
-var STYLES = [{
-  label: "Basic",
-  value: "basic"
-}, {
-  label: "Zoom",
-  value: "zoom"
-}, {
-  label: "Plain Card",
-  value: "plain"
-}, {
-  label: "Rounded Card",
-  value: "rounded"
-}];
 
 /***/ }),
 
@@ -360,16 +295,20 @@ var Edit = function Edit(_ref) {
     fetchBio();
   }, []);
 
-  var fetchPhotos = function fetchPhotos(count) {
-    var _COUNT = count ? count : numberOfImages;
+  var fetchPhotos = function fetchPhotos() {
+    var TOKEN = token || "";
 
-    if (!token) {
+    if (!TOKEN) {
       return false;
     }
 
-    return fetch("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=".concat(token)).then(function (res) {
+    return fetch("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=".concat(TOKEN)).then(function (res) {
       return res.json();
     }).then(function (json) {
+      if (json.error) {
+        setErrorMessage(json.error.message);
+      }
+
       if (json.data) {
         setResponseCode(200);
         setLoading(false);
@@ -406,20 +345,6 @@ var Edit = function Edit(_ref) {
         });
       }
     });
-  };
-
-  var onChangeToken = function onChangeToken(token) {
-    setAttributes({
-      token: token
-    });
-    fetchPhotos(numberOfImages);
-  };
-
-  var onChangeImages = function onChangeImages(numberOfImages) {
-    setAttributes({
-      numberOfImages: numberOfImages
-    });
-    fetchPhotos(numberOfImages);
   };
 
   var container;
@@ -464,21 +389,18 @@ var Edit = function Edit(_ref) {
   } else if (responseCode !== 200) {
     container = /*#__PURE__*/React.createElement("div", null, "something went wrong: ", errorMessage, " ");
   } else {
-    container = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "To get started please add an Instagram Access Token. "), /*#__PURE__*/React.createElement("p", null, "To do this we suggest installing the Feed Them Social plugin by Slick Remix,", " ", /*#__PURE__*/React.createElement("a", {
+    container = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "To get started please add an Instagram Access Token. "), /*#__PURE__*/React.createElement("p", null, "To do this we suggest installing the Feed Them Social plugin by Slick Remix,", /*#__PURE__*/React.createElement("a", {
       target: "_blank",
       rel: "noopener noreferrer",
       href: "https://www.slickremix.com/docs/how-to-create-instagram-access-token/"
-    }, "then following these steps.")), /*#__PURE__*/React.createElement("p", null, "Once you have a token, please paste it into the 'Instagram Access Token' setting."), /*#__PURE__*/React.createElement("p", null, "You can then deactivate the FTS plugin if needed."));
+    }, "then following these steps.")), /*#__PURE__*/React.createElement("p", null, "Once you have a token, please paste it into the 'Access Token' setting."), /*#__PURE__*/React.createElement("p", null, "You can then deactivate the FTS plugin if needed."));
   }
 
   return [isSelected && /*#__PURE__*/React.createElement(_inspector__WEBPACK_IMPORTED_MODULE_3__["default"], {
     attributes: attributes,
     setAttributes: setAttributes,
     fetchPhotos: fetchPhotos
-  }),
-  /*#__PURE__*/
-  //Edit view here
-  React.createElement("div", null, container)];
+  }), /*#__PURE__*/React.createElement("div", null, container)];
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Edit);
@@ -706,16 +628,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./src/constants.js");
 /**
  * WordPress dependencies
  */
 
-
-
-/**
- * Internal depencencies
- */
 
 
 
@@ -730,7 +646,6 @@ var Inspector = function Inspector(_ref) {
       gridGap = attributes.gridGap,
       backgroundColor = attributes.backgroundColor,
       borderRadius = attributes.borderRadius,
-      selectedStyle = attributes.selectedStyle,
       hasEqualImages = attributes.hasEqualImages;
   return /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["InspectorControls"], {
     key: "controls"
@@ -740,30 +655,16 @@ var Inspector = function Inspector(_ref) {
     label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Access Token"),
     value: token,
     onChange: function onChange(token) {
-      console.log("token");
       setAttributes({
         token: token
       });
-      fetchPhotos(numberOfImages);
+      fetchPhotos();
     }
-  })), thumbs.length > 0 && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"], {
+  })), thumbs.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"], {
     title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Settings")
-  }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["SelectControl"], {
-    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Select Style"),
-    value: selectedStyle,
-    options: _constants__WEBPACK_IMPORTED_MODULE_3__["STYLES"],
-    onChange: function onChange(selectedStyle) {
-      selectedStyle === "plain" || selectedStyle === "rounded" ? setAttributes({
-        borderRadius: 0,
-        selectedStyle: selectedStyle
-      }) : setAttributes({
-        selectedStyle: selectedStyle
-      });
-    }
-  }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["ToggleControl"], {
-    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Show equal sized images?"),
+  }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["ToggleControl"], {
+    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Square thumbnail"),
     checked: hasEqualImages,
-    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Use square thumbnails for each image?"),
     onChange: function onChange(hasEqualImages) {
       return setAttributes({
         hasEqualImages: hasEqualImages
@@ -776,7 +677,7 @@ var Inspector = function Inspector(_ref) {
       setAttributes({
         columns: columns
       });
-      fetchPhotos(numberOfImages);
+      fetchPhotos();
     },
     min: 1,
     max: 8
@@ -787,10 +688,10 @@ var Inspector = function Inspector(_ref) {
       setAttributes({
         numberOfImages: numberOfImages
       });
-      fetchPhotos(numberOfImages);
+      fetchPhotos();
     },
     min: 1,
-    max: 30
+    max: 25
   }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["RangeControl"], {
     label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Space Between Images"),
     value: gridGap,
@@ -811,6 +712,18 @@ var Inspector = function Inspector(_ref) {
     },
     min: 0,
     max: 50
+  })), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["PanelColorSettings"], {
+    title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Background Color"),
+    initialOpen: false,
+    colorSettings: [{
+      value: backgroundColor,
+      onChange: function onChange(backgroundColor) {
+        return setAttributes({
+          backgroundColor: backgroundColor
+        });
+      },
+      label: ""
+    }]
   })));
 };
 
