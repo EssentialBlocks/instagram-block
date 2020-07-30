@@ -5,6 +5,7 @@ import "./style.scss";
 import Edit from "./edit";
 import { InstagramIcon } from "./icons";
 import attributes from "./attributes";
+import example from "./example";
 
 registerBlockType("block/instagram-feed-block", {
 	title: __("Instagram Feed Block", "instagram-feed-block"),
@@ -20,4 +21,5 @@ registerBlockType("block/instagram-feed-block", {
 	},
 	edit: Edit,
 	save: () => null,
+	example,
 });

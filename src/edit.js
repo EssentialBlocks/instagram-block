@@ -23,11 +23,21 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 		backgroundColor,
 		showCaptions,
 		borderRadius,
+		preview,
 	} = attributes;
 
 	const [loading, setLoading] = useState(true);
 	const [responseCode, setResponseCode] = useState(200);
 	const [errorMessage, setErrorMessage] = useState("");
+
+	if (preview) {
+		return (
+			<img
+				style={{ width: "100%" }}
+				src="https://raw.githubusercontent.com/rupok/essential-blocks-templates/dev/previews/instagram-preview.png"
+			/>
+		);
+	}
 
 	useEffect(() => {
 		fetchPhotos();

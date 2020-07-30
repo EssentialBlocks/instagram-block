@@ -273,7 +273,8 @@ var Edit = function Edit(_ref) {
       hasEqualImages = attributes.hasEqualImages,
       backgroundColor = attributes.backgroundColor,
       showCaptions = attributes.showCaptions,
-      borderRadius = attributes.borderRadius;
+      borderRadius = attributes.borderRadius,
+      preview = attributes.preview;
 
   var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(true),
       _useState2 = _slicedToArray(_useState, 2),
@@ -289,6 +290,15 @@ var Edit = function Edit(_ref) {
       _useState6 = _slicedToArray(_useState5, 2),
       errorMessage = _useState6[0],
       setErrorMessage = _useState6[1];
+
+  if (preview) {
+    return /*#__PURE__*/React.createElement("img", {
+      style: {
+        width: "100%"
+      },
+      src: "https://raw.githubusercontent.com/rupok/essential-blocks-templates/dev/previews/instagram-preview.png"
+    });
+  }
 
   Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     fetchPhotos();
@@ -404,6 +414,24 @@ var Edit = function Edit(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Edit);
+
+/***/ }),
+
+/***/ "./src/example.js":
+/*!************************!*\
+  !*** ./src/example.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var example = {
+  attributes: {
+    preview: true
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (example);
 
 /***/ }),
 
@@ -590,6 +618,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
 /* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./icons */ "./src/icons.js");
 /* harmony import */ var _attributes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./attributes */ "./src/attributes.js");
+/* harmony import */ var _example__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./example */ "./src/example.js");
+
 
 
 
@@ -608,7 +638,8 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("blo
   edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
   save: function save() {
     return null;
-  }
+  },
+  example: _example__WEBPACK_IMPORTED_MODULE_6__["default"]
 });
 
 /***/ }),
