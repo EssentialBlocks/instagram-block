@@ -12,82 +12,16 @@ const attributes = {
 		type: "number",
 		default: 4,
 	},
-	imageSpace: {
+	gridGap: {
 		type: "number",
 	},
 	thumbs: {
 		type: "array",
 		default: [],
 	},
-	profile: {
-		type: "array",
-		default: [],
-	},
-	displayProfile: {
-		type: "boolean",
-		default: false,
-	},
 	backgroundColor: {
 		type: "string",
 		defualt: "tranaparent",
-	},
-	addHover: {
-		type: "boolean",
-		default: true,
-	},
-	hoverColor: {
-		type: "string",
-	},
-	hoverImageID: {
-		type: "string",
-	},
-	hoverOpacity: {
-		type: "number",
-		default: 0.5,
-	},
-	displayLike: {
-		type: "boolean",
-		default: true,
-	},
-	likeColor: {
-		type: "string",
-		default: "#000000",
-	},
-	displayComment: {
-		type: "boolean",
-		default: true,
-	},
-	commentColor: {
-		type: "string",
-		default: "#000000",
-	},
-	sortBy: {
-		type: "string",
-		default: "most_recent",
-	},
-	nameColor: {
-		type: "string",
-		default: "#000000",
-	},
-	detailsColor: {
-		type: "string",
-		default: "#000000",
-	},
-	nameFontSize: {
-		type: "number",
-		default: 36,
-	},
-	nameSizeUnit: {
-		type: "string",
-		default: "px",
-	},
-	detailsFontSize: {
-		type: "number",
-		default: 18,
-	},
-	detailsSizeUnit: {
-		type: "string",
-		default: "px",
 	},
 	borderRadius: {
 		type: "number",
@@ -97,14 +31,11 @@ const attributes = {
 		type: "string",
 		default: "basic",
 	},
-	fontFamily: {
-		type: "string",
-	},
-	displayDate: {
-		type: "boolean",
-		default: true,
-	},
 	preview: {
+		type: "boolean",
+		default: false,
+	},
+	hasEqualImages: {
 		type: "boolean",
 		default: false,
 	},

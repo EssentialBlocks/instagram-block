@@ -3,9 +3,14 @@
  *
  */
 import { __ } from "@wordpress/i18n";
-import { InspectorControls } from "@wordpress/block-editor";
 import { useState, useEffect } from "@wordpress/element";
 import { Spinner } from "@wordpress/components";
+
+/*
+ * Internal dependencies
+ *
+ */
+import Inspector from "./inspector";
 
 const Edit = ({ isSelected, attributes, setAttributes }) => {
 	const {
@@ -17,6 +22,7 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 		hasEqualImages,
 		backgroundColor,
 		showCaptions,
+		borderRadius,
 	} = attributes;
 
 	const [loading, setLoading] = useState(true);
@@ -118,6 +124,7 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 										className="eb-instagram-image"
 										src={photo.media_url}
 										alt={photo.caption ? photo.caption : ""}
+										style={{ borderRadius }}
 									/>
 									<div className="eb-instagram-image-overlay">
 										{showCaptions && (
@@ -163,16 +170,16 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 
 	return [
 		isSelected && (
-			<Inspector attributes={attributes} setAttributes={setAttributes} />
+			<Inspector
+				attributes={attributes}
+				setAttributes={setAttributes}
+				fetchPhotos={fetchPhotos}
+			/>
 		),
 
 		//Edit view here
 		<div>{container}</div>,
 	];
 };
-
-const Inspector = () => (
-	<InspectorControls key="controls">Ins</InspectorControls>
-);
 
 export default Edit;
