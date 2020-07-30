@@ -302,10 +302,14 @@ var attributes = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -325,47 +329,51 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var Edit = function Edit(_ref) {
   var isSelected = _ref.isSelected,
       attributes = _ref.attributes,
       setAttributes = _ref.setAttributes;
   var token = attributes.token,
-      numberImages = attributes.numberImages;
+      numberOfImages = attributes.numberOfImages,
+      columns = attributes.columns,
+      gridGap = attributes.gridGap,
+      thumbs = attributes.thumbs,
+      hasEqualImages = attributes.hasEqualImages,
+      backgroundColor = attributes.backgroundColor,
+      showCaptions = attributes.showCaptions;
 
-  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(true),
+  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(true),
       _useState2 = _slicedToArray(_useState, 2),
       loading = _useState2[0],
       setLoading = _useState2[1];
 
-  var _useState3 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(200),
+  var _useState3 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(200),
       _useState4 = _slicedToArray(_useState3, 2),
       responseCode = _useState4[0],
       setResponseCode = _useState4[1];
 
-  var _useState5 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
+  var _useState5 = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
       _useState6 = _slicedToArray(_useState5, 2),
       errorMessage = _useState6[0],
       setErrorMessage = _useState6[1];
 
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
     fetchPhotos();
     fetchBio();
   }, []);
 
-  var fetchPhotos = function fetchPhotos(count, token) {
-    var _COUNT = count ? count : numberImages;
+  var fetchPhotos = function fetchPhotos(count) {
+    var _COUNT = count ? count : numberOfImages;
 
-    var _TOKEN = token ? token : token;
-
-    if (!_TOKEN) {
+    if (!token) {
       return false;
     }
 
-    return fetch("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=".concat(_TOKEN)).then(function (res) {
+    return fetch("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=".concat(token)).then(function (res) {
       return res.json();
     }).then(function (json) {
-      console.log(json);
-
       if (json.data) {
         setResponseCode(200);
         setLoading(false);
@@ -385,13 +393,11 @@ var Edit = function Edit(_ref) {
   };
 
   var fetchBio = function fetchBio() {
-    var _TOKEN = token;
-
-    if (!_TOKEN) {
+    if (!token) {
       return false;
     }
 
-    return fetch("https://graph.instagram.com/me?fields=id,username&access_token=".concat(_TOKEN)).then(function (res) {
+    return fetch("https://graph.instagram.com/me?fields=id,username&access_token=".concat(token)).then(function (res) {
       return res.json();
     }).then(function (json) {
       if (json.meta && json.meta.code === 200) {
@@ -406,17 +412,77 @@ var Edit = function Edit(_ref) {
     });
   };
 
+  var onChangeToken = function onChangeToken(token) {
+    setAttributes({
+      token: token
+    });
+    fetchPhotos(numberOfImages);
+  };
+
+  var onChangeImages = function onChangeImages(numberOfImages) {
+    setAttributes({
+      numberOfImages: numberOfImages
+    });
+    fetchPhotos(numberOfImages);
+  };
+
+  var container;
+
+  if (token && responseCode === 200) {
+    if (loading) {
+      container = /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Spinner"], null), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Loading feed"));
+    } else {
+      container = /*#__PURE__*/React.createElement("div", {
+        className: "display-grid eb-instagram-grid",
+        style: {
+          gridTemplateColumns: "repeat(".concat(columns, ", 1fr)"),
+          marginLeft: "-".concat(gridGap, "px"),
+          marginRight: "-".concat(gridGap, "px"),
+          gridGap: "".concat(gridGap, "px")
+        }
+      }, thumbs && thumbs.slice(0, numberOfImages).map(function (photo) {
+        return /*#__PURE__*/React.createElement("div", {
+          className: "eb-image-wrapper " + (hasEqualImages ? "has-equal-images" : ""),
+          style: {
+            backgroundColor: backgroundColor
+          },
+          key: photo.id
+        }, /*#__PURE__*/React.createElement("img", {
+          className: "eb-instagram-image",
+          src: photo.media_url,
+          alt: photo.caption ? photo.caption : ""
+        }), /*#__PURE__*/React.createElement("div", {
+          className: "eb-instagram-image-overlay"
+        }, showCaptions && /*#__PURE__*/React.createElement("div", {
+          className: "eb-instagram-image-caption"
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "eb-instagram-image-caption_text"
+        }, photo.caption), /*#__PURE__*/React.createElement("span", {
+          className: "eb-instagram-image-caption_likes"
+        }))));
+      }));
+    }
+  } else if (responseCode !== 200) {
+    container = /*#__PURE__*/React.createElement("div", null, "something went wrong: ", errorMessage, " ");
+  } else {
+    container = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "To get started please add an Instagram Access Token. "), /*#__PURE__*/React.createElement("p", null, "To do this we suggest installing the Feed Them Social plugin by Slick Remix,", " ", /*#__PURE__*/React.createElement("a", {
+      target: "_blank",
+      rel: "noopener noreferrer",
+      href: "https://www.slickremix.com/docs/how-to-create-instagram-access-token/"
+    }, "then following these steps.")), /*#__PURE__*/React.createElement("p", null, "Once you have a token, please paste it into the 'Instagram Access Token' setting."), /*#__PURE__*/React.createElement("p", null, "You can then deactivate the FTS plugin if needed."));
+  }
+
   return [isSelected && /*#__PURE__*/React.createElement(Inspector, {
     attributes: attributes,
     setAttributes: setAttributes
   }),
   /*#__PURE__*/
   //Edit view here
-  React.createElement("h1", null, "Edit")];
+  React.createElement("div", null, container)];
 };
 
 var Inspector = function Inspector() {
-  return /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__["InspectorControls"], {
+  return /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["InspectorControls"], {
     key: "controls"
   }, "Ins");
 };
@@ -650,6 +716,17 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("blo
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wp"]["blocks"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!*********************************************!*\
+  !*** external {"this":["wp","components"]} ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["components"]; }());
 
 /***/ }),
 
