@@ -23,14 +23,7 @@ import {
 import UnitControl from "../util/unit-control";
 import FontPicker from "../util/typography-control/FontPicker";
 
-const Inspector = ({
-	attributes,
-	setAttributes,
-	isCard,
-	getPhotos,
-	getBio,
-	onSort,
-}) => {
+const Inspector = ({ attributes, setAttributes }) => {
 	const {
 		token,
 		columns,

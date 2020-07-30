@@ -1,7 +1,8 @@
 const attributes = {
 	token: {
 		type: "string",
-		default: "",
+		default:
+			"IGQVJYNzI5NkZAXb2xyTGZAJZAnBIOTRZAblUyUVlsbDJCRWtVTk94Ti1UVXRWOUFaYmJjaUtRcjAwODNZAa3JoSjExY0RBdmxvM01pUlB2M1NwTmlyeHVwUHNsU195UlRiaUJYNTZABUHFfWE1rWER5MlZA6QgZDZD",
 	},
 	columns: {
 		type: "string",
