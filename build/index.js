@@ -2208,6 +2208,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("blo
   category: "widgets",
   icon: _icons__WEBPACK_IMPORTED_MODULE_4__["InstagramIcon"],
   attributes: _attributes__WEBPACK_IMPORTED_MODULE_5__["default"],
+  supports: {
+    align: ["wide", "full"]
+  },
   edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
   save: function save() {
     return null;

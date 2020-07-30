@@ -17,6 +17,10 @@
  *
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/applying-styles-with-stylesheets/
  */
+
+
+require_once __DIR__ . "/instagram-feed.php";
+
 function create_block_instagram_feed_block_block_init() {
 	$dir = dirname( __FILE__ );
 
@@ -42,6 +46,15 @@ function create_block_instagram_feed_block_block_init() {
 		array(),
 		filemtime( "$dir/$style_css" )
 	);
+
+  $frontend_js = "src/frontend.js";
+  wp_enqueue_script(
+    'essential-blocks-instagram-feed-frontend',
+    plugins_url($frontend_js, __FILE__),
+    array( "jquery","wp-editor"),
+    true
+  );
+
 
 	if( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/instagram-feed' ) ) {
     register_block_type( 'block/instagram-feed-block', array(

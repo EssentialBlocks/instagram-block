@@ -2,9 +2,11 @@
 	"name": "block/instagram-feed-block",
 	"title": "Instagram Feed Block",
 	"category": "widgets",
-	"icon": "smiley",
-	"description": "Showcase Instagram posts for your web visitors ",
+	"description": "Showcase Instagram posts for your web visitors",
 	"textdomain": "instagram-feed-block",
+	"supports": {
+		"align": ["wide", "full"]
+	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css"

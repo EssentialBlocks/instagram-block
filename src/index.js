@@ -15,6 +15,9 @@ registerBlockType("block/instagram-feed-block", {
 	category: "widgets",
 	icon: InstagramIcon,
 	attributes,
+	supports: {
+		align: ["wide", "full"],
+	},
 	edit: Edit,
 	save: () => null,
 });
