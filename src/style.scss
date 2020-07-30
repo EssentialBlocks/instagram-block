@@ -1,16 +1,26 @@
-.wp-block-eb-instagram-feed {
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+$xs: 375px;
+$sm: 540px;
+$lg: 786px;
+
+.eb-instagram-wrapper {
 	margin: 0 auto;
-	@media all and (max-width: 375) {
+	@media all and (max-width: $xs) {
 		.eb-instagram-grid {
 			grid-template-columns: repeat(1, 1fr) !important;
 		}
 	}
-	@media all and (min-width: 375) and (max-width: 540) {
+	@media all and (min-width: $xs) and (max-width: $sm) {
 		.eb-instagram-grid {
 			grid-template-columns: repeat(2, 1fr) !important;
 		}
 	}
-	@media all and (min-width: 540) and (max-width: 786) {
+	@media all and (min-width: $sm) and (max-width: $lg) {
 		.eb-instagram-grid {
 			grid-template-columns: repeat(4, 1fr) !important;
 		}
@@ -41,6 +51,15 @@ Image Styling
 .eb-instagram-image-wrapper {
 	position: relative;
 
+	&:hover {
+		.eb-instagram-image-overlay {
+			opacity: 1;
+		}
+		img {
+			opacity: 0.6;
+		}
+	}
+
 	// equal height/width images
 	&.has-equal-images {
 		overflow: hidden;
@@ -56,12 +75,10 @@ Image Styling
 .eb-instagram-image {
 	display: block;
 	margin: 0 auto; // center the image in the container
-	transition: all 0.4s; // for hover zoom effect
-	max-width: 100%;
 }
 
 .eb-instagram-image-overlay {
-	transition: all 0.1s ease-in;
+	transition: all 0.25s ease-in;
 	position: absolute;
 	background-color: transparent;
 	top: 0;
@@ -72,6 +89,7 @@ Image Styling
 	&:before {
 		content: " ";
 		opacity: 1;
+		background: url(./img/instagram-icon-white.svg) no-repeat center center;
 		background-size: 30px 30px;
 		position: absolute;
 		z-index: 100;
@@ -96,7 +114,6 @@ Profile pictures
 }
 .eb-instagram-profile-picture {
 	border-radius: 100%;
-	max-width: 100%;
 }
 .eb-instagram-bio-container {
 	h3,
@@ -106,145 +123,22 @@ Profile pictures
 	}
 }
 
-.eb-instagram-image-wrapper {
-	position: relative;
-	display: grid;
-	overflow: hidden;
-	text-decoration: none !important;
-	color: #000000;
-}
-
-.eb-instagram-like-comment-wrapper {
-	font-size: 16px;
-}
-
-.eb-instagram-like-comment {
-	color: white;
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	width: 100%;
-	height: 100%;
+/**
+Captions
+**/
+.eb-instagram-image-caption {
 	position: absolute;
-	top: 0;
-}
+	bottom: 0;
+	padding: 10px;
+	color: #fff;
+	font-size: 13px;
 
-.hide-like-comment {
-	visibility: hidden;
-}
-
-.eb-instagram-link {
-	color: #7967ff !important;
-}
-
-.eb-instagram-header-wrapper {
-	display: flex;
-	padding: 10px 5px;
-	border: 1px solid #e3e3e3;
-	border-bottom: none;
-	justify-content: space-between;
-	border-radius: 12px 12px 0px 0px;
-	color: #000000;
-}
-
-.eb-instagram-user-wrapper {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	flex: 1;
-	margin-left: 10px;
-}
-
-.eb-instagram-user-icon {
-	border-radius: 50%;
-	height: 30px !important;
-	width: 30px !important;
-	opacity: 1;
-	transform: none;
-}
-
-.eb-instagram-user {
-	font-size: 14px;
-	margin-left: 10px;
-}
-
-.eb-instagram-date-wrapper {
-	display: flex;
-	align-items: center;
-	flex: 1;
-	justify-content: space-evenly;
-	align-self: center;
-}
-
-.eb-instagram-date {
-	font-size: 14px;
-	color: #000000 !important;
-}
-
-.eb-instagram-date-text {
-	margin-left: 5px;
-}
-
-.eb-instagram-footer {
-	display: flex;
-	align-items: center;
-	padding: 10px 10px;
-	border: 1px solid #e3e3e3;
-	margin-top: -6px;
-	border-radius: 10px;
-	background: #ffffff;
-	border-top: none;
-	z-index: 2;
-}
-
-.eb-instagram-footer-like-comment {
-	display: flex;
-	justify-content: space-evenly;
-	font-size: 16px;
-	flex: 1;
-}
-
-.eb-instagram-footer-comment {
-	margin-right: 12px;
-}
-
-.eb-instagram-save {
-	display: flex;
-	justify-content: flex-end;
-	flex: 2;
-}
-
-.eb-instagram-save-icon {
-	height: 30px;
-	width: 30px;
-}
-
-.eb-like-icon,
-.eb-comment-icon {
-	margin-right: 5px;
-}
-
-#SVG_INS_ORG {
-	height: 15%;
-	width: 15%;
-}
-
-#INS_SAVE {
-	fill: #2d2d2d;
-}
-
-.eb-image-wrapper {
-	position: relative;
-}
-
-// equal height/width images
-.has-equal-images {
-	overflow: hidden;
-	padding-bottom: 100%;
-	img {
-		position: absolute;
-		object-fit: cover;
-		width: 100%;
-		height: 100%;
+	.eb-instagram-image-caption_text {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		overflow: hidden;
+		/*! autoprefixer: off */
+		-webkit-box-orient: vertical;
+		/* autoprefixer: on */
 	}
 }

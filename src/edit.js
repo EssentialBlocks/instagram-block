@@ -180,7 +180,7 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 			/>
 		),
 
-		<div>{container}</div>,
+		<div className="eb-instagram-wrapper">{container}</div>,
 	];
 };
 

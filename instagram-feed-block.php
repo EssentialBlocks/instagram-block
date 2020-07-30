@@ -19,7 +19,7 @@
  */
 
 
-require_once __DIR__ . "/instagram-feed.php";
+/* require_once __DIR__ . "/server.php"; */
 
 function create_block_instagram_feed_block_block_init() {
 	$dir = dirname( __FILE__ );

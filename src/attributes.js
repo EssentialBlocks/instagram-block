@@ -33,6 +33,10 @@ const attributes = {
 		type: "boolean",
 		default: false,
 	},
+	showCaptions: {
+		type: "boolean",
+		default: false,
+	},
 };
 
 export default attributes;

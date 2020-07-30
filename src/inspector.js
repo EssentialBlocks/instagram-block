@@ -20,6 +20,7 @@ const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
 		backgroundColor,
 		borderRadius,
 		hasEqualImages,
+		showCaptions,
 	} = attributes;
 
 	return (
@@ -42,6 +43,12 @@ const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
 							label={__("Square thumbnail")}
 							checked={hasEqualImages}
 							onChange={(hasEqualImages) => setAttributes({ hasEqualImages })}
+						/>
+
+						<ToggleControl
+							label={__("Show captions")}
+							checked={showCaptions}
+							onChange={(showCaptions) => setAttributes({ showCaptions })}
 						/>
 
 						<RangeControl

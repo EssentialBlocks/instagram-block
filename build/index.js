@@ -213,6 +213,10 @@ var attributes = {
   hasEqualImages: {
     type: "boolean",
     "default": false
+  },
+  showCaptions: {
+    type: "boolean",
+    "default": false
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (attributes);
@@ -410,7 +414,9 @@ var Edit = function Edit(_ref) {
     attributes: attributes,
     setAttributes: setAttributes,
     fetchPhotos: fetchPhotos
-  }), /*#__PURE__*/React.createElement("div", null, container)];
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "eb-instagram-wrapper"
+  }, container)];
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Edit);
@@ -677,7 +683,8 @@ var Inspector = function Inspector(_ref) {
       gridGap = attributes.gridGap,
       backgroundColor = attributes.backgroundColor,
       borderRadius = attributes.borderRadius,
-      hasEqualImages = attributes.hasEqualImages;
+      hasEqualImages = attributes.hasEqualImages,
+      showCaptions = attributes.showCaptions;
   return /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["InspectorControls"], {
     key: "controls"
   }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"], {
@@ -699,6 +706,14 @@ var Inspector = function Inspector(_ref) {
     onChange: function onChange(hasEqualImages) {
       return setAttributes({
         hasEqualImages: hasEqualImages
+      });
+    }
+  }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["ToggleControl"], {
+    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("Show captions"),
+    checked: showCaptions,
+    onChange: function onChange(showCaptions) {
+      return setAttributes({
+        showCaptions: showCaptions
       });
     }
   }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["RangeControl"], {
