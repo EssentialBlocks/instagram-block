@@ -97,7 +97,7 @@ function eb_instagram_render_callback(array $attributes)
 
 			if ($key < $numberOfImages) {
 				$imageContainer .= '
-				<a class="eb-instagram-image-wrapper ' . $hasEqualImages . '" href="' . esc_attr($thumb->permalink) . '"
+				<a class="eb-image-wrapper ' . $hasEqualImages . '" href="' . esc_attr($thumb->permalink) . '"
 				target="_blank" rel="noopener noreferrer"
 				style="background-color: ' . esc_attr($attributes['backgroundColor']) . '">
 					<img
