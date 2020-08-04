@@ -127,7 +127,7 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 										className="eb-instagram-image"
 										src={photo.media_url}
 										alt={photo.caption ? photo.caption : ""}
-										style={{ borderRadius }}
+										style={{ borderRadius: borderRadius + "%" }}
 									/>
 									<div className="eb-instagram-image-overlay">
 										{showCaptions && (

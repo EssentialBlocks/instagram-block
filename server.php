@@ -45,6 +45,7 @@ function eb_instagram_render_callback(array $attributes)
 			'className' => '',
 			'align' => '',
 			'showCaptions' => false,
+			'borderRadius' => 0
 		]
 	);
 	$token = $attributes['token'];
@@ -56,6 +57,7 @@ function eb_instagram_render_callback(array $attributes)
 	$className = $attributes['className'];
 	$align = $attributes['align'];
 	$showCaptions = $attributes['showCaptions'];
+	$borderRadius = $attributes['borderRadius'];
 
 	// originally we got the user id from the token but this no longer possible
 
@@ -103,6 +105,7 @@ function eb_instagram_render_callback(array $attributes)
 					<img
 					class="eb-instagram-image"
 					key="' . esc_attr($thumb->id) . '"
+          style="border-radius: '.$borderRadius . "%" .' "
 					src="' . $image . '"
 					alt="' . (empty($thumb->caption) ? '' : esc_attr($thumb->caption)) . '"
 					/>

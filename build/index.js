@@ -387,7 +387,7 @@ var Edit = function Edit(_ref) {
           src: photo.media_url,
           alt: photo.caption ? photo.caption : "",
           style: {
-            borderRadius: borderRadius
+            borderRadius: borderRadius + "%"
           }
         }), /*#__PURE__*/React.createElement("div", {
           className: "eb-instagram-image-overlay"
