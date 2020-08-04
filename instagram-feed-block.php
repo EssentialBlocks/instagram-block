@@ -60,7 +60,7 @@ function create_block_instagram_feed_block_block_init() {
     register_block_type( 'block/instagram-feed-block', array(
       'editor_script' => 'create-block-instagram-feed-block-block-editor',
       'style'         => 'create-block-instagram-feed-block-block',
-		'render_callback' => 'kona_render_callback',
+		'render_callback' => 'eb_instagram_render_callback',
 		'attributes' => array(
 			'token' => array(
 				'type' => 'string',

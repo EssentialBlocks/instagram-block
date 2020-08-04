@@ -1,20 +1,9 @@
 <?php
-function kona_register_block()
-{
-
-	// Only load if Gutenberg is available.
-	if (!function_exists('register_block_type')) {
-		return;
-	}
-}
-
-add_action('init', 'kona_register_block');
-
 /**
  * Generic data fetching wrapper
  * Uses the WP-API for fetching
  */
-function kona_fetchData($url)
+function eb_instagram_fetchData($url)
 {
 	$request = wp_remote_get($url);
 
@@ -30,20 +19,20 @@ function kona_fetchData($url)
  * The number of images is used as a suffix in the case that the user
  * adds/removes images and expects a refreshed feed.
  */
-function kona_add_to_cache($result, $suffix = '', $expire = (60 * 60 * 6))
+function eb_instagram_add_to_cache($result, $suffix = '', $expire = (60 * 60 * 6))
 {
-	set_transient('kona-api_' . $suffix, $result, $expire);
+	set_transient('eb-instagram-api_' . $suffix, $result, $expire);
 }
 
-function kona_get_from_cache($suffix = '')
+function eb_instagram_get_from_cache($suffix = '')
 {
-	return get_transient('kona-api_' . $suffix);
+	return get_transient('eb-instagram-api_' . $suffix);
 }
 
 /**
  * Server side rendering functions
  */
-function kona_render_callback(array $attributes)
+function eb_instagram_render_callback(array $attributes)
 {
 	$attributes = wp_parse_args(
 		$attributes,
@@ -73,13 +62,13 @@ function kona_render_callback(array $attributes)
 	// create a unique id so there is no double ups
 	$suffix = $token . '_' . $numberOfImages;
 
-	if (!kona_get_from_cache($suffix)) {
+	if (!eb_instagram_get_from_cache($suffix)) {
 		// no valid cache found
 		// hit the network
-		$result = json_decode(kona_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_tyse,media_url,permalink,thumbnail_url,timestamp,username&access_token={$token}"));
-		kona_add_to_cache($result, $suffix); // add the result to the cache
+		$result = json_decode(eb_instagram_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_tyse,media_url,permalink,thumbnail_url,timestamp,username&access_token={$token}"));
+		eb_instagram_add_to_cache($result, $suffix); // add the result to the cache
 	} else {
-		$result = kona_get_from_cache($suffix); // hit the cache
+		$result = eb_instagram_get_from_cache($suffix); // hit the cache
 	}
 
 	$thumbs = $result->data;
@@ -96,11 +85,11 @@ function kona_render_callback(array $attributes)
 	if (is_array($thumbs)) {
 		foreach ($thumbs as $key=>$thumb) {
 
-			$caption = $showCaptions && $thumb->caption ? '<div class="kona-image-caption">
-			<span class="kona-image-caption_text">
+			$caption = $showCaptions && $thumb->caption ? '<div class="eb-instagram-image-caption">
+			<span class="eb-instagram-image-caption_text">
 				' . $thumb->caption . '
 			</span>
-			<span class="kona-image-caption_likes">
+			<span class="eb-instagram-image-caption_likes">
 			</span>
 		</div>' : '';
 
