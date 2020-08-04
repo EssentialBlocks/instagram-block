@@ -74,7 +74,6 @@ function eb_instagram_render_callback(array $attributes)
 	}
 
 	$thumbs = $result->data;
-	$profile = ''; // our empty profile container
 
 	$imageContainer = '<div class="eb-instagram-wrapper ' . $attributes['className'] . ' align' . $align . '">
 	<div class="eb-instagram-grid"
@@ -105,7 +104,7 @@ function eb_instagram_render_callback(array $attributes)
 					<img
 					class="eb-instagram-image"
 					key="' . esc_attr($thumb->id) . '"
-          style="border-radius: '.$borderRadius . "%" .' "
+					style="border-radius: ' . $borderRadius . "%" . ' "
 					src="' . $image . '"
 					alt="' . (empty($thumb->caption) ? '' : esc_attr($thumb->caption)) . '"
 					/>
