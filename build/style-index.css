@@ -36,16 +36,16 @@
 /**
 Image Styling
 **/
-.eb-instagram-image-wrapper {
+.eb-image-wrapper {
   position: relative; }
-  .eb-instagram-image-wrapper:hover .eb-instagram-image-overlay {
+  .eb-image-wrapper:hover .eb-instagram-image-overlay {
     opacity: 1; }
-  .eb-instagram-image-wrapper:hover img {
+  .eb-image-wrapper:hover img {
     opacity: 0.6; }
-  .eb-instagram-image-wrapper.has-equal-images {
+  .eb-image-wrapper.has-equal-images {
     overflow: hidden;
     padding-bottom: 100%; }
-    .eb-instagram-image-wrapper.has-equal-images img {
+    .eb-image-wrapper.has-equal-images img {
       position: absolute;
       -o-object-fit: cover;
          object-fit: cover;

@@ -403,11 +403,11 @@ var Edit = function Edit(_ref) {
   } else if (responseCode !== 200) {
     container = /*#__PURE__*/React.createElement("div", null, "something went wrong: ", errorMessage, " ");
   } else {
-    container = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "To get started please add an Instagram Access Token. "), /*#__PURE__*/React.createElement("p", null, "To do this we suggest installing the Feed Them Social plugin by Slick Remix,", /*#__PURE__*/React.createElement("a", {
+    container = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "To get started please add an Instagram Access Token. "), /*#__PURE__*/React.createElement("p", null, "You can follow these", " ", /*#__PURE__*/React.createElement("a", {
       target: "_blank",
       rel: "noopener noreferrer",
-      href: "https://www.slickremix.com/docs/how-to-create-instagram-access-token/"
-    }, "then following these steps.")), /*#__PURE__*/React.createElement("p", null, "Once you have a token, please paste it into the 'Access Token' setting."), /*#__PURE__*/React.createElement("p", null, "You can then deactivate the FTS plugin if needed."));
+      href: "https://awplife.com/instagram-access-token-generator/"
+    }, "steps"), " ", "to generate token."), /*#__PURE__*/React.createElement("p", null, "Once you have a token, please paste it into the 'Access Token' setting."));
   }
 
   return [isSelected && /*#__PURE__*/React.createElement(_inspector__WEBPACK_IMPORTED_MODULE_3__["default"], {

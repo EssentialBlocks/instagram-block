@@ -152,21 +152,20 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 			<div>
 				<p>To get started please add an Instagram Access Token. </p>
 				<p>
-					To do this we suggest installing the Feed Them Social plugin by Slick
-					Remix,
+					You can follow these{" "}
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
-						href="https://www.slickremix.com/docs/how-to-create-instagram-access-token/"
+						href="https://awplife.com/instagram-access-token-generator/"
 					>
-						then following these steps.
-					</a>
+						steps
+					</a>{" "}
+					to generate token.
 				</p>
 				<p>
 					Once you have a token, please paste it into the 'Access Token'
 					setting.
 				</p>
-				<p>You can then deactivate the FTS plugin if needed.</p>
 			</div>
 		);
 	}
