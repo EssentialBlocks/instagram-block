@@ -19,7 +19,7 @@
  */
 
 
-/* require_once __DIR__ . "/server.php"; */
+require_once __DIR__ . "/server.php";
 
 function create_block_instagram_feed_block_block_init() {
 	$dir = dirname( __FILE__ );
@@ -60,7 +60,47 @@ function create_block_instagram_feed_block_block_init() {
     register_block_type( 'block/instagram-feed-block', array(
       'editor_script' => 'create-block-instagram-feed-block-block-editor',
       'style'         => 'create-block-instagram-feed-block-block',
-    ) );
-  }
+		'render_callback' => 'kona_render_callback',
+		'attributes' => array(
+			'token' => array(
+				'type' => 'string',
+				'default' => '',
+			),
+			'columns' => array(
+				'type' => 'number',
+				'default' => "4",
+			),
+			'numberOfImages' => array(
+				'type' => 'number',
+				'default' => 4,
+			),
+			'gridGap' => array(
+				'type' => 'number',
+				'default' => 0,
+			),
+			'thumbs' => array(
+				'type' => 'array',
+				'default' => [],
+			),
+			'backgroundColor' => array(
+				'type' => 'string',
+				'default' => 'transparent',
+			),
+			'borderRadius' => array(
+				'type' => 'number',
+				'default' => 0,
+			),
+			'hasEqualImages' => array(
+				'type' => 'boolean',
+				'default' => false,
+			),
+			'showCaptions' => array(
+				'type' => 'boolean',
+				'default' => false,
+			),
+		),
+
+		) );
+	}
 }
 add_action( 'init', 'create_block_instagram_feed_block_block_init' );
