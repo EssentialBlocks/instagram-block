@@ -47,59 +47,49 @@ function create_block_instagram_feed_block_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-  $frontend_js = "src/frontend.js";
-  wp_enqueue_script(
-    'essential-blocks-instagram-feed-frontend',
-    plugins_url($frontend_js, __FILE__),
-    array( "jquery","wp-editor"),
-    true
-  );
-
-
 	if( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/instagram-feed' ) ) {
     register_block_type( 'block/instagram-feed-block', array(
       'editor_script' => 'create-block-instagram-feed-block-block-editor',
       'style'         => 'create-block-instagram-feed-block-block',
-		'render_callback' => 'eb_instagram_render_callback',
-		'attributes' => array(
-			'token' => array(
-				'type' => 'string',
-				'default' => '',
-			),
-			'columns' => array(
-				'type' => 'number',
-				'default' => "4",
-			),
-			'numberOfImages' => array(
-				'type' => 'number',
-				'default' => 4,
-			),
-			'gridGap' => array(
-				'type' => 'number',
-				'default' => 0,
-			),
-			'thumbs' => array(
-				'type' => 'array',
-				'default' => [],
-			),
-			'backgroundColor' => array(
-				'type' => 'string',
-				'default' => 'transparent',
-			),
-			'borderRadius' => array(
-				'type' => 'number',
-				'default' => 0,
-			),
-			'hasEqualImages' => array(
-				'type' => 'boolean',
-				'default' => false,
-			),
-			'showCaptions' => array(
-				'type' => 'boolean',
-				'default' => false,
-			),
-		),
-
+      'render_callback' => 'eb_instagram_render_callback',
+      'attributes' => array(
+        'token' => array(
+          'type' => 'string',
+          'default' => '',
+        ),
+        'columns' => array(
+          'type' => 'number',
+          'default' => "4",
+        ),
+        'numberOfImages' => array(
+          'type' => 'number',
+          'default' => 4,
+        ),
+        'gridGap' => array(
+          'type' => 'number',
+          'default' => 0,
+        ),
+        'thumbs' => array(
+          'type' => 'array',
+          'default' => [],
+        ),
+        'backgroundColor' => array(
+          'type' => 'string',
+          'default' => 'transparent',
+        ),
+        'borderRadius' => array(
+          'type' => 'number',
+          'default' => 0,
+        ),
+        'hasEqualImages' => array(
+          'type' => 'boolean',
+          'default' => false,
+        ),
+        'showCaptions' => array(
+          'type' => 'boolean',
+          'default' => false,
+        ),
+      ),
 		) );
 	}
 }
