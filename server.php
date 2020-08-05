@@ -67,7 +67,7 @@ function eb_instagram_render_callback(array $attributes)
 	if (!eb_instagram_get_from_cache($suffix)) {
 		// no valid cache found
 		// hit the network
-		$result = json_decode(eb_instagram_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_tyse,media_url,permalink,thumbnail_url,timestamp,username&access_token={$token}"));
+		$result = json_decode(eb_instagram_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token={$token}"));
 		eb_instagram_add_to_cache($result, $suffix); // add the result to the cache
 	} else {
 		$result = eb_instagram_get_from_cache($suffix); // hit the cache
@@ -94,7 +94,12 @@ function eb_instagram_render_callback(array $attributes)
 			</span>
 		</div>' : '';
 
+      $media_type = esc_attr($thumb->media_type);
 			$image = esc_attr($thumb->media_url);
+
+      if ($media_type === "VIDEO") {
+        $image = esc_attr($thumb->thumbnail_url);
+      }
 
 			if ($key < $numberOfImages) {
 				$imageContainer .= '

@@ -123,7 +123,11 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 								>
 									<img
 										className="eb-instagram-image"
-										src={photo.media_url}
+										src={
+											photo.media_type === "IMAGE"
+												? photo.media_url
+												: photo.thumbnail_url
+										}
 										alt={photo.caption ? photo.caption : ""}
 										style={{ borderRadius: borderRadius + "%" }}
 									/>
@@ -176,7 +180,6 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 				fetchPhotos={fetchPhotos}
 			/>
 		),
-
 		<div className="eb-instagram-wrapper">{container}</div>,
 	];
 };
