@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     Instagram Feed Block
- * Description:     Example block written with ESNext standard and JSX support – build step required.
+ * Description:     Showcase Instagram posts for your web visitors 
  * Version:         0.1.0
  * Author:          The WordPress Contributors
  * License:         GPL-2.0-or-later
