@@ -20,6 +20,6 @@ registerBlockType("block/instagram-feed-block", {
 		align: ["wide", "full"],
 	},
 	edit: Edit,
-	save: () => null,
+	save: ({ attributes }) => null,
 	example,
 });

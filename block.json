@@ -4,6 +4,7 @@
 	"category": "widgets",
 	"description": "Showcase Instagram posts for your web visitors",
 	"textdomain": "instagram-feed-block",
+	"keywords": ["instagram"],
 	"supports": {
 		"align": ["wide", "full"]
 	},

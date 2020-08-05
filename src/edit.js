@@ -45,14 +45,12 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 	}, []);
 
 	const fetchPhotos = () => {
-		const TOKEN = token || "";
-
-		if (!TOKEN) {
+		if (!token) {
 			return false;
 		}
 
 		return fetch(
-			`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${TOKEN}`
+			`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${token}`
 		)
 			.then((res) => res.json())
 			.then((json) => {
