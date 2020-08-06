@@ -67,7 +67,6 @@ const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
 							value={numberOfImages}
 							onChange={(numberOfImages) => {
 								setAttributes({ numberOfImages });
-								fetchPhotos();
 							}}
 							min={1}
 							max={25}
