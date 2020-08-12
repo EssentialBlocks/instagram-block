@@ -44,6 +44,10 @@ const Edit = ({ isSelected, attributes, setAttributes }) => {
 		fetchBio();
 	}, []);
 
+	useEffect(() => {
+		fetchPhotos();
+	}, [token]);
+
 	const fetchPhotos = () => {
 		if (!token) {
 			return false;

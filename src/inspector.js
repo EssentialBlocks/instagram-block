@@ -10,7 +10,7 @@ import {
 	RangeControl,
 } from "@wordpress/components";
 
-const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
+const Inspector = ({ attributes, setAttributes }) => {
 	const {
 		token,
 		columns,
@@ -31,7 +31,6 @@ const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
 					value={token}
 					onChange={(token) => {
 						setAttributes({ token });
-						fetchPhotos();
 					}}
 				/>
 			</PanelBody>
@@ -56,7 +55,6 @@ const Inspector = ({ attributes, setAttributes, fetchPhotos }) => {
 							value={columns}
 							onChange={(columns) => {
 								setAttributes({ columns });
-								fetchPhotos();
 							}}
 							min={1}
 							max={8}
