@@ -1,14 +1,15 @@
 <?php
 /**
- * Plugin Name:     Instagram Feed Block
+ * Plugin Name:     Instagram Block
  * Description:     Showcase Instagram posts for your web visitors 
- * Version:         0.1.0
- * Author:          The WordPress Contributors
- * License:         GPL-2.0-or-later
- * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     instagram-feed-block
+ * Version:         1.0.0
+ * Author:          WPDeveloper
+ * Author URI:      https://wpdeveloper.net
+ * License:         GPL-3.0-or-later
+ * License URI:     https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:     instagram-block
  *
- * @package         instagram-feed-block
+ * @package         instagram-block
  */
 
 /**

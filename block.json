@@ -1,9 +1,9 @@
 {
-	"name": "block/instagram-feed-block",
-	"title": "Instagram Feed Block",
+	"name": "block/instagram-block",
+	"title": "Instagram Block",
 	"category": "widgets",
 	"description": "Showcase Instagram posts for your web visitors",
-	"textdomain": "instagram-feed-block",
+	"textdomain": "instagram-block",
 	"keywords": ["instagram"],
 	"supports": {
 		"align": ["wide", "full"]
