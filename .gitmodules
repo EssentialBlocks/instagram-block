@@ -1,0 +1,3 @@
+[submodule "util/typography-control"]
+	path = util/typography-control
+	url = git@github.com:EssentialBlocks/typography-control.git
