@@ -1,144 +1,270 @@
-/**
- * #.# Styles
- *
- * CSS for both Frontend+Backend.
- */
-
-$xs: 375px;
-$sm: 540px;
-$lg: 786px;
-
 .eb-instagram-wrapper {
-	margin: 0 auto;
-	@media all and (max-width: $xs) {
-		.eb-instagram-grid {
-			grid-template-columns: repeat(1, 1fr) !important;
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.eb-instagram__gallery {
+	.instagram__gallery__item {
+		.author__info {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+			.author__thumb {
+				height: 40px;
+				min-width: 40px;
+				flex: 0 0 40px;
+				border-radius: 50%;
+				margin-right: 12px;
+				img {
+					height: 100%;
+					width: 100%;
+					object-fit: cover;
+				}
+			}
+			.author__name {
+				font-size: 14px;
+				font-weight: 400;
+				color: #222;
+				margin: 0;
+				a {
+					margin: 0;
+					text-decoration: none;
+					color: #222;
+				}
+			}
 		}
-	}
-	@media all and (min-width: $xs) and (max-width: $sm) {
-		.eb-instagram-grid {
-			grid-template-columns: repeat(2, 1fr) !important;
+		.instagram__gallery__thumb {
+			font-size: 0;
+			img {
+				width: 100%;
+				/* display: block; */
+				/* grid-row: 1 / -1;
+                grid-column: 1; */
+			}
+			.eb-instagram-caption {
+				font-size: 14px;
+			}
 		}
-	}
-	@media all and (min-width: $sm) and (max-width: $lg) {
-		.eb-instagram-grid {
-			grid-template-columns: repeat(4, 1fr) !important;
+		.eb-instagram-meta {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-top: 10px;
+			span {
+				i {
+					margin-right: 8px;
+				}
+			}
 		}
-	}
-	.eb-instagram-grid.use-thumbnail {
-		grid-auto-rows: min-content;
+		&.instagram__gallery__item--content__inner {
+			&:hover {
+				.instagram__gallery__thumb {
+					&::before,
+					.eb-instagram-caption {
+						opacity: 1;
+						z-index: 1;
+					}
+				}
+			}
+			.instagram__gallery__thumb {
+				position: relative;
+				&::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: #453523;
+					content: "";
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+				.eb-instagram-caption {
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					padding: 10px 20px;
+					color: #fff;
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+			}
+		}
+		&.instagram__gallery__item--overlay__simple {
+			&:hover {
+				.instagram__gallery__thumb::before,
+				.instagram__gallery__thumb::after {
+					opacity: 1;
+					z-index: 1;
+				}
+			}
+			.author__info,
+			.instagram__gallery__thumb .eb-instagram-caption,
+			.eb-instagram-meta {
+				display: none;
+			}
+			.instagram__gallery__thumb {
+				position: relative;
+				&::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: #453523;
+					content: "";
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+				&::after {
+					position: absolute;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					// background: url(../../images/insta.png) no-repeat center center;
+					background-size: 30px 30px;
+					content: "";
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+			}
+		}
+		&.instagram__gallery__item--overlay__basic {
+			position: relative;
+			&:hover {
+				.eb-instagram-meta,
+				.instagram__gallery__thumb::before,
+				.instagram__gallery__thumb .eb-instagram-caption {
+					opacity: 1;
+					z-index: 1;
+				}
+			}
+			.author__info {
+				display: none;
+			}
+			.instagram__gallery__thumb {
+				position: relative;
+				&::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: #453523;
+					content: "";
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+				.eb-instagram-caption {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					opacity: 0;
+					transition: opacity 0.3s ease;
+					padding: 10px 15px;
+					font-size: 14px;
+					color: #fff;
+				}
+			}
+			.eb-instagram-meta {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				color: #fff;
+				opacity: 0;
+				padding: 10px 20px;
+				transition: opacity 0.3s ease;
+			}
+		}
+		&.instagram__gallery__item--overlay__standard {
+			position: relative;
+			&:hover {
+				.eb-instagram-meta,
+				.instagram__gallery__thumb::before,
+				.instagram__gallery__thumb .eb-instagram-caption {
+					opacity: 1;
+					z-index: 1;
+				}
+			}
+			.author__info {
+				display: none;
+			}
+			.instagram__gallery__thumb {
+				position: relative;
+				&::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: #453523;
+					content: "";
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				}
+				.eb-instagram-caption {
+					position: absolute;
+					bottom: 20px;
+					left: 0;
+					right: 0;
+					opacity: 0;
+					transition: opacity 0.3s ease;
+					padding: 10px 15px;
+					font-size: 14px;
+					color: #fff;
+				}
+			}
+			.eb-instagram-meta {
+				position: absolute;
+				bottom: 20px;
+				left: 15px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				font-size: 14px;
+				.date {
+					display: none;
+				}
+				.like__count {
+					color: #fff;
+				}
+			}
+		}
+		&.has__equal__height {
+			.thumb__wrap {
+				position: relative;
+				overflow: hidden;
+				padding-top: 100%;
+				img {
+					height: 100%;
+					width: 100%;
+					object-fit: cover;
+					position: absolute;
+					top: 0;
+					left: 0;
+				}
+			}
+		}
 	}
 }
 
-.display-grid {
-	display: grid;
-}
+// Isotope CSS
 
-/* flexbox fallback if the browser does not support display:grid */
-@supports not (display: grid) {
-	.display-grid {
-		display: flex;
-		flex-wrap: row wrap;
-		> * {
-			flex: 0 1 1;
-		}
-	}
-}
-
-/**
-Image Styling
-**/
-.eb-image-wrapper {
-	position: relative;
-
-	&:hover {
-		.eb-instagram-image-overlay {
-			opacity: 1;
-		}
-		img {
-			opacity: 0.6;
-		}
-	}
-
-	// equal height/width images
-	&.has-equal-images {
-		overflow: hidden;
-		padding-bottom: 100%;
-		img {
-			position: absolute;
-			object-fit: cover;
-			width: 100%;
-			height: 100%;
-		}
-	}
-}
-.eb-instagram-image {
+.eb-instagram__gallery:after {
+	content: "";
 	display: block;
-	margin: 0 auto; // center the image in the container
+	clear: both;
 }
 
-.eb-instagram-image-overlay {
-	transition: all 0.25s ease-in;
-	position: absolute;
-	background-color: transparent;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	opacity: 0;
-	&:before {
-		content: " ";
-		opacity: 1;
-		background: url(./img/instagram-icon-white.svg) no-repeat center center;
-		background-size: 30px 30px;
-		position: absolute;
-		z-index: 100;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-	}
+.instagram__gallery__col {
+	float: left;
+	margin-bottom: 30px;
 }
 
-/**
-Profile pictures
-**/
-.eb-instagram-profile-container {
+.instagram__gallery__col:before {
 	display: block;
-	margin-bottom: 1rem;
-	@media all and (min-width: 541px) {
-		display: grid;
-		grid-template-columns: 60px auto;
-		grid-column-gap: 1rem;
-	}
-}
-.eb-instagram-profile-picture {
-	border-radius: 100%;
-}
-.eb-instagram-bio-container {
-	h3,
-	p {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-}
-
-/**
-Captions
-**/
-.eb-instagram-image-caption {
-	position: absolute;
-	bottom: 0;
-	padding: 10px;
-	color: #fff;
-	font-size: 13px;
-
-	.eb-instagram-image-caption_text {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		overflow: hidden;
-		/*! autoprefixer: off */
-		-webkit-box-orient: vertical;
-		/* autoprefixer: on */
-	}
 }
