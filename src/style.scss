@@ -5,10 +5,11 @@
 
 .eb-instagram__gallery {
 	.instagram__gallery__item {
+		border: 1px solid #000;
 		.author__info {
 			display: flex;
 			align-items: center;
-			margin-bottom: 10px;
+			padding: 8px 10px;
 			.author__thumb {
 				height: 40px;
 				min-width: 40px;
@@ -19,6 +20,7 @@
 					height: 100%;
 					width: 100%;
 					object-fit: cover;
+					border-radius: 50%;
 				}
 			}
 			.author__name {
@@ -37,23 +39,22 @@
 			font-size: 0;
 			img {
 				width: 100%;
-				/* display: block; */
-				/* grid-row: 1 / -1;
-                grid-column: 1; */
 			}
 			.eb-instagram-caption {
 				font-size: 14px;
+				padding: 8px 10px;
+				p {
+					margin-top: 5px;
+					margin-bottom: 0px;
+				}
 			}
 		}
 		.eb-instagram-meta {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
-			margin-top: 10px;
+			padding: 8px 10px;
 			span {
-				i {
-					margin-right: 8px;
-				}
+				margin-right: 5px;
 			}
 		}
 		&.instagram__gallery__item--content__inner {
@@ -74,7 +75,7 @@
 					left: 0;
 					right: 0;
 					bottom: 0;
-					background: #453523;
+					background: rgba(0, 0, 0, 0.4) none repeat scroll 0% 0%;
 					content: "";
 					opacity: 0;
 					transition: opacity 0.3s ease;
@@ -92,6 +93,7 @@
 			}
 		}
 		&.instagram__gallery__item--overlay__simple {
+			border: none;
 			&:hover {
 				.instagram__gallery__thumb::before,
 				.instagram__gallery__thumb::after {
@@ -112,7 +114,7 @@
 					left: 0;
 					right: 0;
 					bottom: 0;
-					background: #453523;
+					background: rgba(0, 0, 0, 0.4) none repeat scroll 0% 0%;
 					content: "";
 					opacity: 0;
 					transition: opacity 0.3s ease;
@@ -123,7 +125,8 @@
 					left: 0;
 					bottom: 0;
 					right: 0;
-					// background: url(../../images/insta.png) no-repeat center center;
+					background: url(../assets/images/instagram-icon-white.svg) no-repeat
+						center center;
 					background-size: 30px 30px;
 					content: "";
 					opacity: 0;
@@ -132,6 +135,7 @@
 			}
 		}
 		&.instagram__gallery__item--overlay__basic {
+			border: none;
 			position: relative;
 			&:hover {
 				.eb-instagram-meta,
@@ -152,7 +156,7 @@
 					left: 0;
 					right: 0;
 					bottom: 0;
-					background: #453523;
+					background: rgba(0, 0, 0, 0.4) none repeat scroll 0% 0%;
 					content: "";
 					opacity: 0;
 					transition: opacity 0.3s ease;
@@ -175,6 +179,7 @@
 				bottom: 0;
 				left: 0;
 				right: 0;
+				justify-content: center;
 				color: #fff;
 				opacity: 0;
 				padding: 10px 20px;
@@ -182,6 +187,7 @@
 			}
 		}
 		&.instagram__gallery__item--overlay__standard {
+			border: none;
 			position: relative;
 			&:hover {
 				.eb-instagram-meta,
@@ -202,7 +208,7 @@
 					left: 0;
 					right: 0;
 					bottom: 0;
-					background: #453523;
+					background: rgba(0, 0, 0, 0.4) none repeat scroll 0% 0%;
 					content: "";
 					opacity: 0;
 					transition: opacity 0.3s ease;
@@ -226,7 +232,7 @@
 				opacity: 0;
 				transition: opacity 0.3s ease;
 				font-size: 14px;
-				.date {
+				span {
 					display: none;
 				}
 				.like__count {
@@ -262,7 +268,7 @@
 
 .instagram__gallery__col {
 	float: left;
-	margin-bottom: 30px;
+	padding: 0 10px 10px 10px;
 }
 
 .instagram__gallery__col:before {

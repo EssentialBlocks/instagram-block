@@ -20,9 +20,6 @@ registerBlockType("instagram-block/instagram-feed-block", {
 		align: ["wide", "full"],
 	},
 	edit: Edit,
-	save({ attributes }) {
-		const { token } = attributes;
-		return <h1>{token}</h1>;
-	},
+	save: () => null,
 	example,
 });

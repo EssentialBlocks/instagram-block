@@ -1,10 +1,25 @@
 window.addEventListener("DOMContentLoaded", (event) => {
-	const wrappers = document.getElementsByClassName(`eb-instagram__gallery`);
+	const instagrams = document.getElementsByClassName(`eb-instagram__gallery`);
 
-	console.log(wrappers);
-	for (let wrapper of wrappers) {
-		console.log(wrappers);
-		let leftImage = wrapper.getAttribute("data-hudai");
-		console.log(leftImage);
-	}
+	console.log(instagrams);
+	setTimeout(() => {
+		for (let instagram of instagrams) {
+			var iso;
+
+			imagesLoaded(instagram, function () {
+				iso = new Isotope(instagram, {
+					itemSelector: ".instagram__gallery__col",
+					percentPosition: true,
+					resize: true,
+					gutter: 10,
+					masonry: {
+						columnWidth: ".instagram__gallery__col",
+						gutter: 0,
+						horizontalOrder: true,
+						fitWidth: true,
+					},
+				});
+			});
+		}
+	}, 1000);
 });

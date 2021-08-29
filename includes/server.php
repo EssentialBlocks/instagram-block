@@ -22,7 +22,7 @@ function eb_instagram_fetchData($url)
  */
 function eb_instagram_add_to_cache($result, $suffix = '', $expire = (60 * 60 * 6))
 {
-	set_transient('eb-instagram-api_' . $suffix, $result, $expire);
+	$set = set_transient('eb-instagram-api_' . $suffix, $result, $expire);
 }
 
 function eb_instagram_get_from_cache($suffix = '')
@@ -35,22 +35,24 @@ function eb_instagram_get_from_cache($suffix = '')
  */
 function eb_instagram_render_callback(array $attributes)
 {
-	// echo '<pre>';
-	// print_r($attributes);
-	// echo '</pre>';
+	if (!is_admin()) {
+		wp_enqueue_script("eb-isotope");
+		wp_enqueue_script("eb-imageloaded");
+		wp_enqueue_script("eb-instagram-feed-block-script");
+	}
+
 	$attributes = wp_parse_args(
 		$attributes,
 		[
 			'blockId' => '',
 			'token' => '',
-			'hasEqualImages' => false,
-			'numberOfImages' => 4,
-			'gridGap' => 0,
+			'hasEqualImages' => true,
+			'numberOfImages' => 6,
 			'backgroundColor' => 'transparent',
 			'className' => '',
 			'align' => '',
-			'showCaptions' => false,
-			'borderRadius' => 0
+			'showCaptions' => true,
+			'sortBy' => 'most_recent',
 		]
 	);
 
@@ -62,14 +64,13 @@ function eb_instagram_render_callback(array $attributes)
 	$overlayStyle = $attributes['overlayStyle'];
 	$hasEqualImages = $attributes['hasEqualImages'] ? ' has__equal__height' : '';
 	$numberOfImages = $attributes['numberOfImages'];
-	$columns = $attributes['columns'];
-	$gridGap = $attributes['gridGap'];
-	$className = $attributes['className'];
-	$align = $attributes['align'];
+	$sortBy = $attributes['sortBy'];
 	$showCaptions = $attributes['showCaptions'];
-	$borderRadius = $attributes['borderRadius'];
 	$showProfileName = $attributes['showProfileName'];
 	$showProfileImg = $attributes['showProfileImg'];
+	$showMeta = $attributes['showMeta'];
+	$enableLink = $attributes['enableLink'];
+	$openInNewTab = $attributes['openInNewTab'];
 	$profileImg = isset($attributes['profileImg']) ? $attributes['profileImg'] : '';
 	$profileName = isset($attributes['profileName']) ? $attributes['profileName'] : '';
 
@@ -77,7 +78,6 @@ function eb_instagram_render_callback(array $attributes)
 
 	// create a unique id so there is no double ups
 	$suffix = $token . '_' . $numberOfImages;
-
 	if (!eb_instagram_get_from_cache($suffix)) {
 		// no valid cache found
 		// hit the network
@@ -87,58 +87,83 @@ function eb_instagram_render_callback(array $attributes)
 		$result = eb_instagram_get_from_cache($suffix); // hit the cache
 	}
 
-	$thumbs = $result->data;
+	$thumbs = isset($result->data) ? $result->data : array();
+
 	$layoutClass = $layout === "card" ? $cardStyle : $overlayStyle;
 
 	$imageContainer = '<div class="eb-instagram-wrapper ' . $blockId . '">
 	<div class="eb-instagram__gallery">
 	';
 
-
-
 	if (is_array($thumbs)) {
+
+		switch ($sortBy) {
+			case 'most_recent':
+				usort($thumbs, function ($a, $b) {
+					return (int)(strtotime($a->timestamp) < strtotime($b->timestamp));
+				});
+				break;
+
+			case 'least_recent':
+				usort($thumbs, function ($a, $b) {
+					return (int)(strtotime($a->timestamp) > strtotime($b->timestamp));
+				});
+				break;
+		}
+
 		foreach ($thumbs as $key => $thumb) {
-			// echo '<pre>';
-			// print_r($thumb);
-			// echo '</pre>';
-			$author_info = '';
-			if ('card' === $layout) {
-				// var_dump($showProfileName, $showProfileImg, $profileName);
-				if ($showProfileName || $showProfileImg) {
-					$author_info .= '<div class="author__info">';
-					if ($showProfileImg && !empty($profileImg)) {
-						$author_info .= '<div class="author__thumb">
-							<img src=' . $profileImg . ' alt=' . $thumb->username . ' />
+			$author_info = $meta = '';
+			if ('card' === $layout && ($showProfileName || $showProfileImg)) {
+				$author_info .= '<div class="author__info">';
+				if ($showProfileImg && !empty($profileImg)) {
+					$author_info .= '<div class="author__thumb">
+							<a href="//www.instagram.com/' . $thumb->username . '" target="_blank"><img src=' . $profileImg . ' alt=' . $thumb->username . ' /></a>
 						</div>';
-					}
-					$author_name = !empty($profileName) ? esc_html($profileName) : $thumb->username;
-					if ($showProfileName) {
-						$author_info .= '<h5 class="author__name">' . $author_name . '</h5>';
-					}
-					$author_info .= '</div>';
 				}
+				$author_name = !empty($profileName) ? esc_html($profileName) : $thumb->username;
+				if ($showProfileName) {
+					$author_info .= '<h5 class="author__name"><a href="//www.instagram.com/' . $thumb->username . '" target="_blank">' . $author_name . '</a></h5>';
+				}
+				$author_info .= '</div>';
 			}
 
+			if ($showMeta) {
+				$meta .= '<div class="eb-instagram-meta">
+					<span class="dashicons dashicons-clock"></span>
+					<span class="eb-instagram-date">
+						' . date("d M Y", strtotime($thumb->timestamp)) . '
+					</span>
+				</div>';
+			}
 
-			$caption = $showCaptions && $thumb->caption ? '<div class="eb-instagram-caption"><p>' . $thumb->caption . '</p></div>' : '';
-
+			$caption = $showCaptions && isset($thumb->caption) ? '<div class="eb-instagram-caption"><p>' . $thumb->caption . '</p></div>' : '';
 			$media_type = esc_attr($thumb->media_type);
 			$image = esc_url($thumb->media_url);
 
 			if ($media_type === "VIDEO") {
 				$image = esc_url($thumb->thumbnail_url);
 			}
+			$imageAlt = isset($thumb->caption) ? $thumb->caption : '';
+			$target = $enableLink && $openInNewTab ? '_blank' : '';
 
 			if ($key < $numberOfImages) {
 				$imageContainer .= '<div class="instagram__gallery__col">
 					<div class="instagram__gallery__item instagram__gallery__item--' . $layoutClass . $hasEqualImages . '">
-					' . $author_info . '
-					<div class="instagram__gallery__thumb">
-						<div class="thumb__wrap">
-							<img src="' . $image . '" alt="' . $caption . '" />
-						</div>
-						' . $caption . '
-						</div>
+						' . $author_info;
+				if ($enableLink) {
+					$imageContainer .= '<a href="' . $thumb->permalink . '" target="' . $target . '">';
+				}
+				$imageContainer .= '<div class="instagram__gallery__thumb">
+				
+				 <div class="thumb__wrap">
+								<img src="' . $image . '" alt="' . $imageAlt . '" />
+							</div>
+							' . $caption . '</div>';
+				if ($enableLink) {
+					$imageContainer .= '</a>';
+				}
+				$imageContainer .=
+					$meta . '
 					</div>
 				</div>';
 			}

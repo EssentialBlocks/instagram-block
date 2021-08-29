@@ -21,8 +21,8 @@ import ColorControl from "../util/color-control";
 import ImageAvatar from "../util/image-avatar";
 import ResponsiveRangeController from "../util/responsive-range-control";
 import ResponsiveDimensionsControl from "../util/dimensions-control-v2";
+import BorderShadowControl from "../util/border-shadow-control";
 import TypographyDropdown from "../util/typography-control-v2";
-import GradientColorControl from "../util/gradient-color-controller";
 import {
 	mimmikCssForResBtns,
 	mimmikCssOnPreviewBtnClickWhileBlockSelected,
@@ -35,7 +35,15 @@ import {
 	NUMBER_OF_COLUMNS,
 	SORT_OPTIONS,
 	GRID_GAP,
+	IMAGE_BORDER,
+	WRAPPER_MARGIN,
+	WRAPPER_PADDING,
 } from "./constants";
+import {
+	typoPrefix_caption,
+	typoPrefix_meta,
+	typoPrefix_header,
+} from "./constants/typographyPrefixConstants";
 
 const Inspector = ({ attributes, setAttributes }) => {
 	const {
@@ -46,9 +54,10 @@ const Inspector = ({ attributes, setAttributes }) => {
 		cardStyle,
 		thumbs,
 		numberOfImages,
-		gridGap,
-		backgroundColor,
-		borderRadius,
+		captionColor,
+		metaColor,
+		headerColor,
+		overlayColor,
 		hasEqualImages,
 		showCaptions,
 		enableLink,
@@ -57,7 +66,6 @@ const Inspector = ({ attributes, setAttributes }) => {
 		profileImg,
 		showProfileName,
 		profileName,
-		showPagination,
 		sortBy,
 		showMeta,
 	} = attributes;
@@ -170,14 +178,11 @@ const Inspector = ({ attributes, setAttributes }) => {
 															max={100}
 														/>
 														<ResponsiveRangeController
-															baseLabel={__(
-																"Space Between Images",
-																"instagram-block"
-															)}
-															controlName={GRID_GAP}
+															baseLabel={__("Columns", "instagram-block")}
+															controlName={NUMBER_OF_COLUMNS}
 															resRequiredProps={resRequiredProps}
-															min={0}
-															max={30}
+															min={1}
+															max={8}
 															step={1}
 															noUnits
 														/>
@@ -192,6 +197,7 @@ const Inspector = ({ attributes, setAttributes }) => {
 												</PanelBody>
 												<PanelBody
 													title={__("General Settings", "instagram-block")}
+													initialOpen={false}
 												>
 													<SelectControl
 														label={__("Layout", "instagram-block")}
@@ -221,15 +227,6 @@ const Inspector = ({ attributes, setAttributes }) => {
 															}
 														/>
 													)}
-													<ResponsiveRangeController
-														baseLabel={__("Columns", "instagram-block")}
-														controlName={NUMBER_OF_COLUMNS}
-														resRequiredProps={resRequiredProps}
-														min={1}
-														max={8}
-														step={1}
-														noUnits
-													/>
 													{layout === "card" && (
 														<>
 															<hr />
@@ -284,14 +281,7 @@ const Inspector = ({ attributes, setAttributes }) => {
 														</>
 													)}
 													<ToggleControl
-														label={__("Load More", "intagram-block")}
-														checked={showPagination}
-														onChange={(showPagination) =>
-															setAttributes({ showPagination })
-														}
-													/>
-													<ToggleControl
-														label={__("Show captions")}
+														label={__("Show captions", "instagram-block")}
 														checked={showCaptions}
 														onChange={(showCaptions) =>
 															setAttributes({ showCaptions })
@@ -321,35 +311,120 @@ const Inspector = ({ attributes, setAttributes }) => {
 														checked={showMeta}
 														onChange={(showMeta) => setAttributes({ showMeta })}
 													/>
-													<RangeControl
-														label={__("Border Radius")}
-														value={borderRadius}
-														onChange={(borderRadius) =>
-															setAttributes({ borderRadius })
-														}
-														min={0}
-														max={50}
-													/>
 												</PanelBody>
-
-												<PanelColorSettings
-													title={__("Background Color")}
-													initialOpen={false}
-													colorSettings={[
-														{
-															value: backgroundColor,
-															onChange: (backgroundColor) =>
-																setAttributes({ backgroundColor }),
-															label: "",
-														},
-													]}
-												/>
 											</>
 										)}
 									</>
 								)}
-								{tab.name === "styles" && <></>}
-								{tab.name === "advance" && <></>}
+								{tab.name === "styles" && (
+									<>
+										<PanelBody
+											title={__("Feed Styles", "instagram-block")}
+											initialOpen={true}
+										>
+											<>
+												<ResponsiveDimensionsControl
+													resRequiredProps={resRequiredProps}
+													className=""
+													controlName={GRID_GAP}
+													baseLabel={__("Padding", "instagram-block")}
+												/>
+												{layout === "overlay" && (
+													<ColorControl
+														label={__("Overlay Color", "instagram-block")}
+														color={overlayColor}
+														onChange={(overlayColor) =>
+															setAttributes({ overlayColor })
+														}
+													/>
+												)}
+												<BaseControl>
+													<h3 className="eb-control-title">
+														{__("Border", "instagram-block")}
+													</h3>
+												</BaseControl>
+												<BorderShadowControl
+													controlName={IMAGE_BORDER}
+													resRequiredProps={resRequiredProps}
+													noShadow
+												/>
+											</>
+										</PanelBody>
+										<PanelBody
+											title={__("Caption", "instagram-block")}
+											initialOpen={false}
+										>
+											<>
+												<TypographyDropdown
+													baseLabel={__("Typography", "instagram-block")}
+													typographyPrefixConstant={typoPrefix_caption}
+													resRequiredProps={resRequiredProps}
+												/>
+												<ColorControl
+													label={__("Color", "instagram-block")}
+													color={captionColor}
+													onChange={(captionColor) =>
+														setAttributes({ captionColor })
+													}
+												/>
+											</>
+										</PanelBody>
+										<PanelBody
+											title={__("Meta", "instagram-block")}
+											initialOpen={false}
+										>
+											<>
+												<TypographyDropdown
+													baseLabel={__("Typography", "instagram-block")}
+													typographyPrefixConstant={typoPrefix_meta}
+													resRequiredProps={resRequiredProps}
+												/>
+												<ColorControl
+													label={__("Color", "instagram-block")}
+													color={metaColor}
+													onChange={(metaColor) => setAttributes({ metaColor })}
+												/>
+											</>
+										</PanelBody>
+										<PanelBody
+											title={__("Header", "instagram-block")}
+											initialOpen={false}
+										>
+											<>
+												<TypographyDropdown
+													baseLabel={__("Typography", "instagram-block")}
+													typographyPrefixConstant={typoPrefix_header}
+													resRequiredProps={resRequiredProps}
+												/>
+												<ColorControl
+													label={__("Color", "instagram-block")}
+													color={headerColor}
+													onChange={(headerColor) =>
+														setAttributes({ headerColor })
+													}
+												/>
+											</>
+										</PanelBody>
+									</>
+								)}
+								{tab.name === "advance" && (
+									<>
+										<PanelBody>
+											<>
+												<ResponsiveDimensionsControl
+													resRequiredProps={resRequiredProps}
+													controlName={WRAPPER_PADDING}
+													baseLabel={__("Padding", "instagram-block")}
+												/>
+												<ResponsiveDimensionsControl
+													resRequiredProps={resRequiredProps}
+													controlName={WRAPPER_MARGIN}
+													baseLabel={__("Margin", "instagram-block")}
+												/>
+											</>
+										</PanelBody>
+									</>
+								)}
 							</div>
 						)}
 					</TabPanel>

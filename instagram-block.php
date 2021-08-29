@@ -22,9 +22,10 @@
 
 define('INSTAGRAM_BLOCK_ASSETS', plugin_dir_url(__FILE__) . "assets/");
 
+require_once __DIR__ . '/lib/style-handler/style-handler.php';
 require_once __DIR__ . '/includes/admin-enqueue.php';
 require_once __DIR__ . '/includes/server.php';
-require_once __DIR__ . '/lib/style-handler/style-handler.php';
+
 
 function eb_instagram_feed_block_init()
 {
@@ -60,18 +61,50 @@ function eb_instagram_feed_block_init()
 
   $style_css = 'build/style-index.css';
   wp_register_style(
-    'eb-instagram-feed-block-editor-style',
+    'eb-instagram-feed-block-style',
     plugins_url($style_css, __FILE__),
     array(),
     filemtime("$dir/$style_css")
+  );
+
+  // isotope
+  $isotope_js = "assets/js/isotope.pkgd.min.js";
+  wp_register_script(
+    'eb-isotope',
+    plugins_url($isotope_js, __FILE__),
+    array(),
+    filemtime("$dir/$isotope_js"),
+    true
+  );
+
+  // imageloaded
+  $imageloaded_js = "assets/js/imagesloaded.pkgd.min.js";
+  wp_register_script(
+    'eb-imageloaded',
+    plugins_url($imageloaded_js, __FILE__),
+    array(),
+    filemtime("$dir/$imageloaded_js"),
+    true
+  );
+
+  // eb-instagram js
+  $eb_instagram_js = "assets/js/eb-instagram.js";
+  wp_register_script(
+    'eb-instagram-feed-block-script',
+    plugins_url($eb_instagram_js, __FILE__),
+    array(
+      'eb-isotope',
+      'eb-imageloaded',
+    ),
+    filemtime("$dir/$eb_instagram_js")
   );
 
   if (!WP_Block_Type_Registry::get_instance()->is_registered('essential-blocks/instagram-feed')) {
     register_block_type('instagram-block/instagram-feed-block', array(
       'editor_script' => 'eb-instagram-feed-block-editor',
       'editor_style' => 'eb-instagram-feed-block-editor',
-      'style'         => 'eb-instagram-feed-block-editor-style',
-      // 'render_callback' => 'eb_instagram_render_callback',
+      'style'         => 'eb-instagram-feed-block-style',
+      'render_callback' => 'eb_instagram_render_callback',
       'attributes' => array(
         'blockId' => array(
           'type' => "string",
@@ -98,7 +131,7 @@ function eb_instagram_feed_block_init()
         ),
         'numberOfImages' => array(
           'type' => 'number',
-          'default' => 4,
+          'default' => 6,
         ),
         'gridGap' => array(
           'type' => 'number',
@@ -108,21 +141,13 @@ function eb_instagram_feed_block_init()
           'type' => 'array',
           'default' => [],
         ),
-        'backgroundColor' => array(
-          'type' => 'string',
-          'default' => 'transparent',
-        ),
-        'borderRadius' => array(
-          'type' => 'number',
-          'default' => 0,
-        ),
         'hasEqualImages' => array(
           'type' => 'boolean',
-          'default' => false,
+          'default' => true,
         ),
         'showCaptions' => array(
           'type' => 'boolean',
-          'default' => false,
+          'default' => true,
         ),
         'showProfileName' => array(
           'type' => 'boolean',
@@ -133,10 +158,26 @@ function eb_instagram_feed_block_init()
           'default' => true,
         ),
         'profileImg' => array(
-          "type" => "string",
+          'type' => 'string',
         ),
         'profileName' => array(
-          "type" => "string",
+          'type' => 'string',
+        ),
+        'showMeta' => array(
+          'type' => 'boolean',
+          'default' => true,
+        ),
+        'enableLink' => array(
+          'type' => 'boolean',
+          'default' => false,
+        ),
+        'openInNewTab' => array(
+          'type' => 'boolean',
+          'default' => false,
+        ),
+        'sortBy' => array(
+          'type' => "string",
+          'default' => "most_recent",
         ),
       ),
     ));

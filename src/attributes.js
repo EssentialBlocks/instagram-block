@@ -1,9 +1,18 @@
-import { NUMBER_OF_COLUMNS, GRID_GAP } from "./constants";
+import {
+	NUMBER_OF_COLUMNS,
+	GRID_GAP,
+	IMAGE_BORDER,
+	WRAPPER_MARGIN,
+	WRAPPER_PADDING,
+} from "./constants";
+import * as typoPrefixs from "./constants/typographyPrefixConstants";
 import {
 	generateTypographyAttributes,
 	generateResponsiveRangeAttributes,
 	generateDimensionsAttributes,
+	generateBorderShadowAttributes,
 } from "../util/helpers";
+
 const attributes = {
 	// the following 4 attributes is must required for responsive options and asset generation for frontend
 	// responsive control attributes ⬇
@@ -44,7 +53,7 @@ const attributes = {
 	},
 	numberOfImages: {
 		type: "number",
-		default: 4,
+		default: 6,
 	},
 	gridGap: {
 		type: "number",
@@ -53,25 +62,25 @@ const attributes = {
 		type: "array",
 		default: [],
 	},
-	profile: {
-		type: "array",
-		default: [],
-	},
-	backgroundColor: {
-		type: "string",
-		defualt: "tranaparent",
-	},
-	borderRadius: {
-		type: "number",
-		default: 0,
-	},
 	preview: {
 		type: "boolean",
 		default: false,
 	},
+	captionColor: {
+		type: "string",
+	},
+	metaColor: {
+		type: "string",
+	},
+	headerColor: {
+		type: "string",
+	},
+	overlayColor: {
+		type: "string",
+	},
 	hasEqualImages: {
 		type: "boolean",
-		default: false,
+		default: true,
 	},
 	showCaptions: {
 		type: "boolean",
@@ -103,10 +112,6 @@ const attributes = {
 	profileName: {
 		type: "string",
 	},
-	pagination: {
-		type: "boolean",
-		default: false,
-	},
 	sortBy: {
 		type: "string",
 		default: "most_recent",
@@ -115,13 +120,24 @@ const attributes = {
 		type: "boolean",
 		default: true,
 	},
+	// typography attributes
+	...generateTypographyAttributes(Object.values(typoPrefixs)),
 	...generateResponsiveRangeAttributes(NUMBER_OF_COLUMNS, {
 		defaultRange: 3,
 		noUnits: true,
 	}),
-	...generateResponsiveRangeAttributes(GRID_GAP, {
-		defaultRange: 15,
-		noUnits: true,
+	...generateDimensionsAttributes(GRID_GAP),
+	...generateDimensionsAttributes(WRAPPER_PADDING),
+	...generateDimensionsAttributes(WRAPPER_MARGIN, {
+		top: 28,
+		right: 0,
+		bottom: 28,
+		left: 0,
+		isLinked: false,
+	}),
+	// border & shadow attributes
+	...generateBorderShadowAttributes(IMAGE_BORDER, {
+		noShadow: true,
 	}),
 };
 

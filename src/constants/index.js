@@ -42,3 +42,6 @@ export const CARD_STYLE = [
 
 export const NUMBER_OF_COLUMNS = "imgNum";
 export const GRID_GAP = "gridGap";
+export const IMAGE_BORDER = "imgBrdShd";
+export const WRAPPER_MARGIN = "wrpMargin";
+export const WRAPPER_PADDING = "wrpPadding";

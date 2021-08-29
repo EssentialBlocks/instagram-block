@@ -1,33 +1,39 @@
-/*
- * WordPress dependencies
- *
- */
 const { __ } = wp.i18n;
 const { useState, useEffect } = wp.element;
 const { Spinner, Toolbar, ToolbarButton } = wp.components;
 const { useBlockProps, BlockControls, MediaUpload } = wp.blockEditor;
 const { select } = wp.data;
-
-/*
- * Internal dependencies
- *
+/**
+ * Internal Import
  */
 import "./editor.scss";
 import Inspector from "./inspector";
-
 import {
-	mimmikCssForPreviewBtnClick,
-	duplicateBlockIdFix,
 	softMinifyCssStrings,
 	isCssExists,
+	mimmikCssForPreviewBtnClick,
+	duplicateBlockIdFix,
+	generateDimensionsControlStyles,
+	generateBorderShadowStyles,
 	generateTypographyStyles,
 	generateResponsiveRangeStyles,
-	generateDimensionsControlStyles,
 } from "../util/helpers";
 
-import { NUMBER_OF_COLUMNS, GRID_GAP } from "./constants";
+import {
+	NUMBER_OF_COLUMNS,
+	GRID_GAP,
+	IMAGE_BORDER,
+	WRAPPER_MARGIN,
+	WRAPPER_PADDING,
+} from "./constants";
+import {
+	typoPrefix_caption,
+	typoPrefix_meta,
+	typoPrefix_header,
+} from "./constants/typographyPrefixConstants";
 
-const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
+const edit = (props) => {
+	const { attributes, setAttributes, clientId, isSelected } = props;
 	const {
 		blockId,
 		blockMeta,
@@ -39,168 +45,25 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 		cardStyle,
 		thumbs,
 		numberOfImages,
-		gridGap,
-		backgroundColor,
-		borderRadius,
 		hasEqualImages,
 		showCaptions,
-		enableLink,
-		openInNewTab,
+		captionColor,
+		metaColor,
+		headerColor,
+		overlayColor,
 		showProfileImg,
 		profileImg,
 		imageID,
 		showProfileName,
 		profileName,
-		showPagination,
 		sortBy,
 		preview,
 		showMeta,
 	} = attributes;
 
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [responseCode, setResponseCode] = useState(200);
 	const [errorMessage, setErrorMessage] = useState("");
-
-	if (preview) {
-		return (
-			<img
-				style={{ width: "100%" }}
-				src="https://raw.githubusercontent.com/rupok/essential-blocks-templates/dev/previews/instagram-preview.png"
-			/>
-		);
-	}
-
-	useEffect(() => {
-		fetchPhotos();
-	}, []);
-
-	useEffect(() => {
-		fetchPhotos();
-	}, [token]);
-
-	const fetchPhotos = () => {
-		if (!token) {
-			return false;
-		}
-
-		return fetch(
-			`https://graph.instagram.com/me/media?fields=id,caption,like_count,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${token}`
-		)
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.error) {
-					setErrorMessage(json.error.message);
-				}
-				if (json.data) {
-					setResponseCode(200);
-					setLoading(false);
-
-					if (json.data.length > 0) {
-						setAttributes({ thumbs: json.data });
-					} else {
-						setAttributes({ thumbs: [] });
-						setResponseCode(500);
-					}
-				}
-			});
-	};
-
-	let container;
-	let equalImage = hasEqualImages ? " has__equal__height" : "";
-	let layoutClass = layout === "card" ? cardStyle : overlayStyle;
-
-	if (token && responseCode === 200) {
-		if (loading) {
-			container = (
-				<p>
-					<Spinner />
-					{__("Loading feed")}
-				</p>
-			);
-		} else {
-			container = (
-				<>
-					{thumbs &&
-						thumbs.slice(0, numberOfImages).map((photo) => {
-							// console.log(photo);
-							return (
-								<div className="instagram__gallery__col">
-									<div
-										className={`instagram__gallery__item instagram__gallery__item--${layoutClass}${equalImage}`}
-									>
-										{layout === "card" && (
-											<>
-												{(showProfileName || showProfileImg) && (
-													<div className="author__info">
-														{showProfileImg && profileImg && (
-															<div className="author__thumb">
-																<img src={profileImg} alt={photo.username} />
-															</div>
-														)}
-														{showProfileName && (
-															<h5 className="author__name">
-																{profileName ? profileName : photo.username}
-															</h5>
-														)}
-													</div>
-												)}
-											</>
-										)}
-										<div className="instagram__gallery__thumb">
-											<div className="thumb__wrap">
-												<img
-													src={
-														photo.media_type === "VIDEO"
-															? photo.thumbnail_url
-															: photo.media_url
-													}
-													alt={photo.caption ? photo.caption : ""}
-												/>
-											</div>
-											{showCaptions && photo.caption && (
-												<div className="eb-instagram-caption">
-													<p>{photo.caption}</p>
-												</div>
-											)}
-										</div>
-										{showMeta && (
-											<div className="eb-instagram-meta">
-												<span className="date">
-													{new Date(photo.timestamp).toLocaleDateString()}
-												</span>
-											</div>
-										)}
-									</div>
-								</div>
-							);
-						})}
-				</>
-			);
-		}
-	} else if (responseCode !== 200) {
-		container = <div>something went wrong: {errorMessage} </div>;
-	} else {
-		container = (
-			<div>
-				<p>To get started please add an Instagram Access Token. </p>
-				<p>
-					You can follow these{" "}
-					<a
-						target="_blank"
-						rel="noopener noreferrer"
-						href="https://awplife.com/instagram-access-token-generator/"
-					>
-						steps
-					</a>{" "}
-					to generate token.
-				</p>
-				<p>
-					Once you have a token, please paste it into the 'Access Token'
-					setting.
-				</p>
-			</div>
-		);
-	}
 
 	// number of columns
 	const {
@@ -214,59 +77,183 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 		customUnit: "",
 	});
 
-	// grid padding left
+	// padding between images
 	const {
-		rangeStylesDesktop: gridGapLeftDesktop,
-		rangeStylesTab: gridGapLeftTab,
-		rangeStylesMobile: gridGapLeftMobile,
-	} = generateResponsiveRangeStyles({
+		dimensionStylesDesktop: gridGapDesktop,
+		dimensionStylesTab: gridGapTab,
+		dimensionStylesMobile: gridGapMobile,
+	} = generateDimensionsControlStyles({
 		controlName: GRID_GAP,
-		property: "padding-left",
+		styleFor: "padding",
 		attributes,
-		customUnit: "px",
 	});
 
-	// grid padding right
 	const {
-		rangeStylesDesktop: gridGapRightDesktop,
-		rangeStylesTab: gridGapRightTab,
-		rangeStylesMobile: gridGapRightMobile,
-	} = generateResponsiveRangeStyles({
-		controlName: GRID_GAP,
-		property: "padding-right",
+		styesDesktop: imageBdShadowStyesDesktop,
+		styesTab: imageBdShadowStyesTab,
+		styesMobile: imageBdShadowStyesMobile,
+		stylesHoverDesktop: imageBdShadowStylesHoverDesktop,
+		stylesHoverTab: imageBdShadowStylesHoverTab,
+		stylesHoverMobile: imageBdShadowStylesHoverMobile,
+		transitionStyle: imageBdShadowTransitionStyle,
+	} = generateBorderShadowStyles({
+		controlName: IMAGE_BORDER,
 		attributes,
-		customUnit: "px",
 	});
 
-	// console.log(typeof numberOfColumnsTab, typeof numberOfColumnsMobile);
+	const {
+		typoStylesDesktop: captionTypoStylesDesktop,
+		typoStylesTab: captionTypoStylesTab,
+		typoStylesMobile: captionTypoStylesMobile,
+	} = generateTypographyStyles({
+		attributes,
+		prefixConstant: typoPrefix_caption,
+	});
 
-	// desktop styles
+	const {
+		typoStylesDesktop: metaTypoStylesDesktop,
+		typoStylesTab: metaTypoStylesTab,
+		typoStylesMobile: metaTypoStylesMobile,
+	} = generateTypographyStyles({
+		attributes,
+		prefixConstant: typoPrefix_meta,
+	});
+
+	const {
+		typoStylesDesktop: headerTypoStylesDesktop,
+		typoStylesTab: headerTypoStylesTab,
+		typoStylesMobile: headerTypoStylesMobile,
+	} = generateTypographyStyles({
+		attributes,
+		prefixConstant: typoPrefix_header,
+	});
+
+	const {
+		dimensionStylesDesktop: wrapperMarginStylesDesktop,
+		dimensionStylesTab: wrapperMarginStylesTab,
+		dimensionStylesMobile: wrapperMarginStylesMobile,
+	} = generateDimensionsControlStyles({
+		controlName: WRAPPER_MARGIN,
+		styleFor: "margin",
+		attributes,
+	});
+
+	const {
+		dimensionStylesDesktop: wrapperPaddingStylesDesktop,
+		dimensionStylesTab: wrapperPaddingStylesTab,
+		dimensionStylesMobile: wrapperPaddingStylesMobile,
+	} = generateDimensionsControlStyles({
+		controlName: WRAPPER_PADDING,
+		styleFor: "padding",
+		attributes,
+	});
+
 	const desktopStyles = `
+		.eb-instagram-wrapper.${blockId} {
+			${wrapperMarginStylesDesktop}
+			${wrapperPaddingStylesDesktop}
+		}
+
 		.eb-instagram-wrapper.${blockId} .instagram__gallery__col {
-			${gridGapLeftDesktop}
-			${gridGapRightDesktop}
+			${gridGapDesktop}
 			width: calc(100% / ${numberOfColumnsDesktop.replace(/[^0-9]/g, "")});
+		}
+
+		.eb-instagram-wrapper.${blockId} .instagram__gallery__item {
+			${imageBdShadowStyesDesktop}
+			overflow: hidden;
+			transition: ${imageBdShadowTransitionStyle};
+		}
+
+		.eb-instagram-wrapper.${blockId}:hover .instagram__gallery__item {
+			${imageBdShadowStylesHoverDesktop}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-caption p {
+			${captionTypoStylesDesktop}
+			${captionColor ? `color: ${captionColor};` : ""}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-meta .eb-instagram-date {
+			${metaTypoStylesDesktop}
+		}
+
+		${
+			metaColor
+				? `.eb-instagram-wrapper.${blockId} .eb-instagram-meta span {
+			color: ${metaColor};
+		}`
+				: ""
+		}
+		
+		${
+			overlayColor
+				? `.eb-instagram-wrapper.${blockId} .instagram__gallery__item.instagram__gallery__item--overlay__simple .instagram__gallery__thumb::before,
+		.eb-instagram-wrapper.${blockId} .instagram__gallery__item.instagram__gallery__item--overlay__basic .instagram__gallery__thumb::before,
+		.eb-instagram-wrapper.${blockId} .instagram__gallery__item.instagram__gallery__item--overlay__standard .instagram__gallery__thumb::before {
+			background: ${overlayColor}
+		}`
+				: ""
+		}
+		
+
+		.eb-instagram-wrapper.${blockId} .author__info .author__name,
+		.eb-instagram-wrapper.${blockId} .author__info .author__name a  {
+			${headerTypoStylesDesktop}
+			${headerColor ? `color: ${headerColor};` : ""}
+		}
+
+
+		.eb-instagram-wrapper.${blockId} .hide {
+			display: none;
 		}
 	`;
 
-	// tab styles
 	const tabStyles = `
+		.eb-instagram-wrapper.${blockId} {
+			${wrapperMarginStylesTab}
+			${wrapperPaddingStylesTab}
+		}
+		
 		.eb-instagram-wrapper.${blockId} .instagram__gallery__col {
-			${gridGapLeftTab}
-			${gridGapRightTab}
+			${gridGapTab}
 			${
 				numberOfColumnsTab == ""
 					? `width: calc(100% / 2)`
 					: `width: calc(100% / ${numberOfColumnsTab.replace(/[^0-9]/g, "")});`
 			}
 		}
+
+		.eb-instagram-wrapper.${blockId} .instagram__gallery__item {
+			${imageBdShadowStyesTab}
+		}
+
+		.eb-instagram-wrapper.${blockId}:hover .instagram__gallery__item {
+			${imageBdShadowStylesHoverTab}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-caption p {
+			${captionTypoStylesTab}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-meta .eb-instagram-date {
+			${metaTypoStylesTab}
+		}
+
+		.eb-instagram-wrapper.${blockId} .author__info .author__name,
+		.eb-instagram-wrapper.${blockId} .author__info .author__name a  {
+			${headerTypoStylesTab}
+		}
 	`;
 
-	// mobile styles
 	const mobileStyles = `
+		.eb-instagram-wrapper.${blockId} {
+			${wrapperMarginStylesMobile}
+			${wrapperPaddingStylesMobile}
+		}
+		
 		.eb-instagram-wrapper.${blockId} .instagram__gallery__col {
-			${gridGapLeftMobile}
-			${gridGapRightMobile}
+			${gridGapMobile}
 			${
 				numberOfColumnsMobile == ""
 					? `width: calc(100% / 1);`
@@ -275,6 +262,27 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 							""
 					  )});`
 			}
+		}
+
+		.eb-instagram-wrapper.${blockId} .instagram__gallery__item {
+			${imageBdShadowStyesMobile}
+		}
+
+		.eb-instagram-wrapper.${blockId}:hover .instagram__gallery__item {
+			${imageBdShadowStylesHoverMobile}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-caption p {
+			${captionTypoStylesMobile}
+		}
+
+		.eb-instagram-wrapper.${blockId} .eb-instagram-meta .eb-instagram-date {
+			${metaTypoStylesMobile}
+		}
+
+		.eb-instagram-wrapper.${blockId} .author__info .author__name,
+		.eb-instagram-wrapper.${blockId} .author__info .author__name a  {
+			${headerTypoStylesMobile}
 		}
 	`;
 
@@ -287,7 +295,7 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 
 	// this useEffect is for creating an unique id for each block's unique className by a random unique number
 	useEffect(() => {
-		const BLOCK_PREFIX = "eb-instagram";
+		const BLOCK_PREFIX = "eb-instagram-feed";
 		duplicateBlockIdFix({
 			BLOCK_PREFIX,
 			blockId,
@@ -335,12 +343,243 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 		}
 	}, [attributes]);
 
+	if (preview) {
+		return (
+			<img
+				style={{ width: "100%" }}
+				src="https://raw.githubusercontent.com/rupok/essential-blocks-templates/dev/previews/instagram-preview.png"
+			/>
+		);
+	}
+
+	const fetchInstagramDom = () => {
+		const instagrams = document.querySelectorAll(
+			`.${blockId} .eb-instagram__gallery`
+		);
+		setTimeout(() => {
+			for (let instagram of instagrams) {
+				var iso;
+
+				imagesLoaded(instagram, function () {
+					iso = new Isotope(instagram, {
+						itemSelector: ".instagram__gallery__col",
+						percentPosition: true,
+						masonry: {
+							columnWidth: ".instagram__gallery__col",
+							gutter: 0,
+							horizontalOrder: true,
+							fitWidth: true,
+						},
+					});
+				});
+			}
+			setLoading(false);
+		}, 1000);
+	};
+
+	useEffect(() => {
+		fetchPhotos();
+		// start isotop
+		if (thumbs.length > 0) {
+			fetchInstagramDom();
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchPhotos();
+	}, [token]);
+
+	useEffect(() => {
+		if (thumbs.length > 0) {
+			setLoading(true);
+			fetchInstagramDom();
+		}
+	}, [
+		layout,
+		overlayStyle,
+		cardStyle,
+		sortBy,
+		numberOfImages,
+		hasEqualImages,
+		showCaptions,
+		showMeta,
+		attributes.imgNumRange,
+		attributes.TABimgNumRange,
+		attributes.MOBimgNumRange,
+		resOption,
+	]);
+
+	const dateFormat = (date) => {
+		const monthNames = [
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec",
+		];
+		const dateObj = new Date(date);
+		const month = monthNames[dateObj.getMonth()];
+		const day = String(dateObj.getDate()).padStart(2, "0");
+		const year = dateObj.getFullYear();
+
+		return day + " " + month + " " + year;
+	};
+
+	const fetchPhotos = () => {
+		if (!token) {
+			return false;
+		}
+
+		return fetch(
+			`https://graph.instagram.com/me/media?fields=id,caption,like_count,media_type,media_url,permalink,thumbnail_url,timestamp,username&limit=500&access_token=${token}`
+		)
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.error) {
+					setErrorMessage(json.error.message);
+					setResponseCode(json.error.code);
+				}
+				if (json.data) {
+					setResponseCode(200);
+					setLoading(false);
+
+					if (json.data.length > 0) {
+						setAttributes({ thumbs: json.data });
+					} else {
+						setAttributes({ thumbs: [] });
+						setResponseCode(500);
+					}
+				}
+			});
+	};
+
+	switch (sortBy) {
+		case "most_recent":
+			thumbs.sort((a, b) => {
+				let da = new Date(a.timestamp),
+					db = new Date(b.timestamp);
+				return db - da;
+			});
+			break;
+		case "least_recent":
+			thumbs.sort((a, b) => {
+				let da = new Date(a.timestamp),
+					db = new Date(b.timestamp);
+				return da - db;
+			});
+			break;
+	}
+
+	let container;
+	let equalImage = hasEqualImages ? " has__equal__height" : "";
+	let layoutClass = layout === "card" ? cardStyle : overlayStyle;
+
+	if (token && responseCode === 200) {
+		if (loading && thumbs.length === 0) {
+			container = (
+				<p>
+					<Spinner />
+					{__("Loading feed")}
+				</p>
+			);
+		} else {
+			container = (
+				<>
+					{thumbs &&
+						thumbs.slice(0, numberOfImages).map((photo) => {
+							return (
+								<div className="instagram__gallery__col">
+									<div
+										className={`instagram__gallery__item instagram__gallery__item--${layoutClass}${equalImage}`}
+									>
+										{layout === "card" && (
+											<>
+												{(showProfileName || showProfileImg) && (
+													<div className="author__info">
+														{showProfileImg && profileImg && (
+															<div className="author__thumb">
+																<img src={profileImg} alt={photo.username} />
+															</div>
+														)}
+														{showProfileName && (
+															<h5 className="author__name">
+																{profileName ? profileName : photo.username}
+															</h5>
+														)}
+													</div>
+												)}
+											</>
+										)}
+										<div className="instagram__gallery__thumb">
+											<div className="thumb__wrap">
+												<img
+													src={
+														photo.media_type === "VIDEO"
+															? photo.thumbnail_url
+															: photo.media_url
+													}
+													alt={photo.caption ? photo.caption : ""}
+												/>
+											</div>
+											{showCaptions && photo.caption && (
+												<div className="eb-instagram-caption">
+													<p>{photo.caption}</p>
+												</div>
+											)}
+										</div>
+										{showMeta && (
+											<div className="eb-instagram-meta">
+												<span class="dashicons dashicons-clock"></span>
+												<span className="eb-instagram-date">
+													{dateFormat(photo.timestamp)}
+												</span>
+											</div>
+										)}
+									</div>
+								</div>
+							);
+						})}
+				</>
+			);
+		}
+	} else if (responseCode !== 200) {
+		container = <div>something went wrong: {errorMessage} </div>;
+	} else {
+		container = (
+			<div>
+				<p>To get started please add an Instagram Access Token. </p>
+				<p>
+					You can follow these{" "}
+					<a
+						target="_blank"
+						rel="noopener noreferrer"
+						href="https://awplife.com/instagram-access-token-generator/"
+					>
+						steps
+					</a>{" "}
+					to generate token.
+				</p>
+				<p>
+					Once you have a token, please paste it into the 'Access Token'
+					setting.
+				</p>
+			</div>
+		);
+	}
+
 	return [
 		isSelected && (
 			<Inspector
+				key="inspector"
 				attributes={attributes}
 				setAttributes={setAttributes}
-				fetchPhotos={fetchPhotos}
 			/>
 		),
 		<BlockControls>
@@ -394,11 +633,23 @@ const Edit = ({ isSelected, attributes, setAttributes, clientId }) => {
 				 }
 				 `}
 			</style>
+
 			<div className={`eb-instagram-wrapper ${blockId}`}>
-				<div className="eb-instagram__gallery">{container}</div>
+				<div className={`eb-instagram__gallery${loading ? " hide" : ""}`}>
+					{container}
+				</div>
+				{loading ? (
+					<>
+						<p>
+							<Spinner />
+							{__("Loading feed")}
+						</p>
+					</>
+				) : (
+					""
+				)}
 			</div>
 		</div>,
 	];
 };
-
-export default Edit;
+export default edit;

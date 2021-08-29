@@ -10,36 +10,8 @@ class InstagramBlockAdmin
     public function enqueue_scripts()
     {
         if ($this->eb_is_edit_page()) {
-
-            $isotope = INSTAGRAM_BLOCK_ASSETS . "js/isotope.pkgd.min.js";
-            // isotope
-            wp_enqueue_script(
-                'isotope',
-                $isotope,
-                array(),
-                '1.0',
-                true
-            );
-
-            // imageloaded
-            $imagesloaded = INSTAGRAM_BLOCK_ASSETS . "js/imagesloaded.pkgd.min.js";
-            wp_enqueue_script(
-                'eb-imagesloaded',
-                $imagesloaded,
-                array(),
-                '1.0',
-                true
-            );
-
-            // eb instagram block js
-            $instagram = INSTAGRAM_BLOCK_ASSETS . "js/eb-instagram.js";
-            wp_enqueue_script(
-                'eb-instagram',
-                $instagram,
-                array(),
-                '1.0',
-                true
-            );
+            wp_enqueue_script('eb-isotope',);
+            wp_enqueue_script('eb-imageloaded');
         }
     }
 
