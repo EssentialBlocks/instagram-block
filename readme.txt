@@ -1,5 +1,5 @@
 === Instagram Block ===
-Contributors: wpdevteam, re_enter_rupok, Asif2BD, alam789
+Contributors: wpdevteam, re_enter_rupok, Asif2BD, alam789, fencermonir
 Tags: block, blocks, instagram, instagram feed, instagram gallery, gutenberg, gutenberg blocks
 Requires at least: 5.0
 Tested up to: 5.5
@@ -82,6 +82,18 @@ Yes, it will work with any standard WordPress theme.
 
 
 == Changelog ==
+
+= 1.1.0 (dev) =
+* Added: Sorting option
+* Added: Layout option
+* Added: Show meta option
+* Added: Responsive preview option
+* Added: Wrapper margin, padding option
+* Added: Caption, profile, meta typography, color option
+* Added: Responsive columns option
+* Improved: Instagram API limit
+* Improved: Border style for images
+* Improved: Inspector panel design
 
 = 1.0.0 =
 * Initial Release
