@@ -3,7 +3,7 @@
  */
 const { __ } = wp.i18n;
 const { useEffect } = wp.element;
-const { InspectorControls, PanelColorSettings } = wp.blockEditor;
+const { InspectorControls } = wp.blockEditor;
 const { select } = wp.data;
 const {
 	PanelBody,
@@ -108,9 +108,9 @@ const Inspector = ({ attributes, setAttributes }) => {
 		<InspectorControls key="controls">
 			<div className="eb-panel-control">
 				{!token && (
-					<PanelBody title={__("API key")}>
+					<PanelBody title={__("API key", "instagram-block")}>
 						<TextareaControl
-							label={__("Access Token")}
+							label={__("Access Token", "instagram-block")}
 							value={token}
 							onChange={(token) => {
 								setAttributes({ token });
@@ -144,9 +144,9 @@ const Inspector = ({ attributes, setAttributes }) => {
 							<div className={"eb-tab-controls " + tab.name}>
 								{tab.name === "general" && (
 									<>
-										<PanelBody title={__("API key")}>
+										<PanelBody title={__("API key", "instagram-block")}>
 											<TextareaControl
-												label={__("Access Token")}
+												label={__("Access Token", "instagram-block")}
 												value={token}
 												onChange={(token) => {
 													setAttributes({ token });

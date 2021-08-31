@@ -8,10 +8,10 @@ import attributes from "./attributes";
 import example from "./example";
 
 registerBlockType("instagram-block/instagram-feed-block", {
-	title: __("Instagram Feed Block", "instagram-feed-block"),
+	title: __("Instagram Feed Block", "instagram-block"),
 	description: __(
 		"Showcase Instagram posts for your web visitors",
-		"instagram-feed-block"
+		"instagram-block"
 	),
 	category: "widgets",
 	icon: InstagramIcon,

@@ -55,9 +55,6 @@ const attributes = {
 		type: "number",
 		default: 6,
 	},
-	gridGap: {
-		type: "number",
-	},
 	thumbs: {
 		type: "array",
 		default: [],
@@ -130,9 +127,7 @@ const attributes = {
 	...generateDimensionsAttributes(WRAPPER_PADDING),
 	...generateDimensionsAttributes(WRAPPER_MARGIN, {
 		top: 28,
-		right: 0,
 		bottom: 28,
-		left: 0,
 		isLinked: false,
 	}),
 	// border & shadow attributes

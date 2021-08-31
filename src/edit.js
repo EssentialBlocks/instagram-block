@@ -88,6 +88,7 @@ const edit = (props) => {
 		attributes,
 	});
 
+	// border & shadow
 	const {
 		styesDesktop: imageBdShadowStyesDesktop,
 		styesTab: imageBdShadowStyesTab,
@@ -101,6 +102,7 @@ const edit = (props) => {
 		attributes,
 	});
 
+	// caption typography
 	const {
 		typoStylesDesktop: captionTypoStylesDesktop,
 		typoStylesTab: captionTypoStylesTab,
@@ -110,6 +112,7 @@ const edit = (props) => {
 		prefixConstant: typoPrefix_caption,
 	});
 
+	// meta typography
 	const {
 		typoStylesDesktop: metaTypoStylesDesktop,
 		typoStylesTab: metaTypoStylesTab,
@@ -119,6 +122,7 @@ const edit = (props) => {
 		prefixConstant: typoPrefix_meta,
 	});
 
+	// header typography
 	const {
 		typoStylesDesktop: headerTypoStylesDesktop,
 		typoStylesTab: headerTypoStylesTab,
@@ -128,6 +132,7 @@ const edit = (props) => {
 		prefixConstant: typoPrefix_header,
 	});
 
+	// wrapper margin
 	const {
 		dimensionStylesDesktop: wrapperMarginStylesDesktop,
 		dimensionStylesTab: wrapperMarginStylesTab,
@@ -138,6 +143,7 @@ const edit = (props) => {
 		attributes,
 	});
 
+	// wrapper padding
 	const {
 		dimensionStylesDesktop: wrapperPaddingStylesDesktop,
 		dimensionStylesTab: wrapperPaddingStylesTab,
@@ -366,9 +372,6 @@ const edit = (props) => {
 						percentPosition: true,
 						masonry: {
 							columnWidth: ".instagram__gallery__col",
-							gutter: 0,
-							horizontalOrder: true,
-							fitWidth: true,
 						},
 					});
 				});
@@ -556,11 +559,11 @@ const edit = (props) => {
 			<div>
 				<p>To get started please add an Instagram Access Token. </p>
 				<p>
-					You can follow these{" "}
+					You can follow 1 to 3{" "}
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
-						href="https://awplife.com/instagram-access-token-generator/"
+						href="https://developers.facebook.com/docs/instagram-basic-display-api/getting-started"
 					>
 						steps
 					</a>{" "}
@@ -596,7 +599,7 @@ const edit = (props) => {
 					render={({ open }) => (
 						<ToolbarButton
 							className="components-toolbar__control"
-							label={__("Edit Image", "instagram-block")}
+							label={__("Edit Profile Image", "instagram-block")}
 							icon="edit"
 							onClick={open}
 						/>

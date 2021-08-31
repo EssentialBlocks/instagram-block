@@ -119,7 +119,7 @@ function eb_instagram_feed_block_init()
         ),
         'cardStyle' => array(
           'type' => "string",
-          'default' => "",
+          'default' => "content__outter",
         ),
         'token' => array(
           'type' => 'string',
@@ -132,10 +132,6 @@ function eb_instagram_feed_block_init()
         'numberOfImages' => array(
           'type' => 'number',
           'default' => 6,
-        ),
-        'gridGap' => array(
-          'type' => 'number',
-          'default' => 0,
         ),
         'thumbs' => array(
           'type' => 'array',

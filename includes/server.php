@@ -46,13 +46,21 @@ function eb_instagram_render_callback(array $attributes)
 		[
 			'blockId' => '',
 			'token' => '',
+			'layout' => 'overlay',
+			'cardStyle' => 'content__outter',
+			'overlayStyle' => 'overlay__simple',
 			'hasEqualImages' => true,
 			'numberOfImages' => 6,
-			'backgroundColor' => 'transparent',
-			'className' => '',
-			'align' => '',
-			'showCaptions' => true,
 			'sortBy' => 'most_recent',
+			'showCaptions' => true,
+			'showProfileName' => true,
+			'showProfileImg' => true,
+			'showMeta' => true,
+			'enableLink' => false,
+			'openInNewTab' => false,
+			'profileImg' => '',
+			'profileName' => '',
+			'align' => '',
 		]
 	);
 
@@ -73,6 +81,8 @@ function eb_instagram_render_callback(array $attributes)
 	$openInNewTab = $attributes['openInNewTab'];
 	$profileImg = isset($attributes['profileImg']) ? $attributes['profileImg'] : '';
 	$profileName = isset($attributes['profileName']) ? $attributes['profileName'] : '';
+	$align = isset($attributes['align']) ? ' align' . $attributes['align'] : '';
+
 
 	// originally we got the user id from the token but this no longer possible
 
@@ -91,7 +101,7 @@ function eb_instagram_render_callback(array $attributes)
 
 	$layoutClass = $layout === "card" ? $cardStyle : $overlayStyle;
 
-	$imageContainer = '<div class="eb-instagram-wrapper ' . $blockId . '">
+	$imageContainer = '<div class="eb-instagram-wrapper ' . $blockId . $align . '">
 	<div class="eb-instagram__gallery">
 	';
 
