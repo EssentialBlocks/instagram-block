@@ -280,13 +280,15 @@ const Inspector = ({ attributes, setAttributes }) => {
 															)}
 														</>
 													)}
-													<ToggleControl
-														label={__("Show captions", "instagram-block")}
-														checked={showCaptions}
-														onChange={(showCaptions) =>
-															setAttributes({ showCaptions })
-														}
-													/>
+													{overlayStyle !== "overlay__simple" && (
+														<ToggleControl
+															label={__("Show captions", "instagram-block")}
+															checked={showCaptions}
+															onChange={(showCaptions) =>
+																setAttributes({ showCaptions })
+															}
+														/>
+													)}
 													<ToggleControl
 														label={__("Show Link?", "instagram-block")}
 														checked={enableLink}
@@ -306,11 +308,15 @@ const Inspector = ({ attributes, setAttributes }) => {
 															}
 														/>
 													)}
-													<ToggleControl
-														label={__("Show Meta?", "instagram-block")}
-														checked={showMeta}
-														onChange={(showMeta) => setAttributes({ showMeta })}
-													/>
+													{overlayStyle !== "overlay__simple" && (
+														<ToggleControl
+															label={__("Show Meta?", "instagram-block")}
+															checked={showMeta}
+															onChange={(showMeta) =>
+																setAttributes({ showMeta })
+															}
+														/>
+													)}
 												</PanelBody>
 											</>
 										)}

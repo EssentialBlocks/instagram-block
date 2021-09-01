@@ -1,6 +1,8 @@
 .eb-instagram__gallery {
 	.instagram__gallery__item {
-		border: 1px solid #000;
+		border: 1px solid #f5f5f5;
+		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+		padding: 5px 0;
 		.author__info {
 			display: flex;
 			align-items: center;
@@ -89,6 +91,7 @@
 		}
 		&.instagram__gallery__item--overlay__simple {
 			border: none;
+			padding: 0;
 			&:hover {
 				.instagram__gallery__thumb::before,
 				.instagram__gallery__thumb::after {
@@ -131,6 +134,7 @@
 		}
 		&.instagram__gallery__item--overlay__basic {
 			border: none;
+			padding: 0;
 			position: relative;
 			&:hover {
 				.eb-instagram-meta,
@@ -183,6 +187,7 @@
 		}
 		&.instagram__gallery__item--overlay__standard {
 			border: none;
+			padding: 0;
 			position: relative;
 			&:hover {
 				.eb-instagram-meta,
@@ -263,7 +268,7 @@
 
 .instagram__gallery__col {
 	float: left;
-	padding: 0 10px 10px 10px;
+	padding: 10px;
 }
 
 .instagram__gallery__col:before {
