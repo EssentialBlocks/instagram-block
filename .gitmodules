@@ -1,6 +1,6 @@
-[submodule "util/typography-control"]
-	path = util/typography-control
-	url = git@github.com:EssentialBlocks/typography-control.git
-[submodule "util/unit-control"]
-	path = util/unit-control
-	url = git@github.com:EssentialBlocks/unit-control.git
+[submodule "util"]
+	path = util
+	url = git@github.com:EssentialBlocks/controls.git
+[submodule "lib/style-handler"]
+	path = lib/style-handler
+	url = git@github.com:EssentialBlocks/style-handler.git
