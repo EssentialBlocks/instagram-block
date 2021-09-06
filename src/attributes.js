@@ -97,6 +97,7 @@ const attributes = {
 	},
 	profileImg: {
 		type: "string",
+		default: "../wp-content/plugins/instagram-block/assets/images/user.png",
 	},
 	imageID: {
 		type: "string",
