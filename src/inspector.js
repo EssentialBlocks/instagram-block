@@ -1,11 +1,10 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-const { useEffect } = wp.element;
-const { InspectorControls } = wp.blockEditor;
-const { select } = wp.data;
-const {
+import { __ } from "@wordpress/i18n";
+import { useEffect } from "@wordpress/element";
+import { InspectorControls, MediaUpload } from "@wordpress/block-editor";
+import {
 	PanelBody,
 	ToggleControl,
 	TextareaControl,
@@ -13,20 +12,41 @@ const {
 	TextControl,
 	RangeControl,
 	BaseControl,
-	TabPanel,
-} = wp.components;
+	Button,
+	TabPanel
+} from "@wordpress/components";
+import { select } from "@wordpress/data";
 
 import objAttributes from "./attributes";
-import ColorControl from "../util/color-control";
-import ImageAvatar from "../util/image-avatar";
-import ResponsiveRangeController from "../util/responsive-range-control";
-import ResponsiveDimensionsControl from "../util/dimensions-control-v2";
-import BorderShadowControl from "../util/border-shadow-control";
-import TypographyDropdown from "../util/typography-control-v2";
-import {
-	mimmikCssForResBtns,
-	mimmikCssOnPreviewBtnClickWhileBlockSelected,
-} from "../util/helpers";
+
+// import ColorControl from "../../../util/color-control";
+// import ImageAvatar from "../../../util/image-avatar";
+// import ResponsiveRangeController from "../../../util/responsive-range-control";
+// import ResponsiveDimensionsControl from "../../../util/dimensions-control-v2";
+// import BorderShadowControl from "../../../util/border-shadow-control";
+// import TypographyDropdown from "../../../util/typography-control-v2";
+// import {
+// 	mimmikCssForResBtns,
+// 	mimmikCssOnPreviewBtnClickWhileBlockSelected,
+// } from "../../../util/helpers";
+
+const {
+	// mimmikCssForResBtns,
+	// mimmikCssOnPreviewBtnClickWhileBlockSelected,
+
+	// 
+	ColorControl,
+	ImageAvatar,
+	ResponsiveRangeController,
+	ResponsiveDimensionsControl,
+	BorderShadowControl,
+	TypographyDropdown,
+} = window.EBInstagramFeedControls;
+
+const editorStoreForGettingPreivew =
+	eb_style_handler.editor_type === "edit-site"
+		? "core/edit-site"
+		: "core/edit-post";
 
 import {
 	CARD_STYLE,
@@ -64,6 +84,7 @@ const Inspector = ({ attributes, setAttributes }) => {
 		openInNewTab,
 		showProfileImg,
 		profileImg,
+		imageID,
 		showProfileName,
 		profileName,
 		sortBy,
@@ -73,29 +94,29 @@ const Inspector = ({ attributes, setAttributes }) => {
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class only the first time once
 	useEffect(() => {
 		setAttributes({
-			resOption: select("core/edit-post").__experimentalGetPreviewDeviceType(),
+			resOption: select(editorStoreForGettingPreivew).__experimentalGetPreviewDeviceType(),
 		});
 	}, []);
 
-	// this useEffect is for mimmiking css for all the eb blocks on resOption changing
-	useEffect(() => {
-		mimmikCssForResBtns({
-			domObj: document,
-			resOption,
-		});
-	}, [resOption]);
+	// // this useEffect is for mimmiking css for all the eb blocks on resOption changing
+	// useEffect(() => {
+	// 	mimmikCssForResBtns({
+	// 		domObj: document,
+	// 		resOption,
+	// 	});
+	// }, [resOption]);
 
-	// this useEffect is to mimmik css for responsive preview in the editor page when clicking the buttons in the 'Preview button of wordpress' located beside the 'update' button while any block is selected and it's inspector panel is mounted in the DOM
-	useEffect(() => {
-		const cleanUp = mimmikCssOnPreviewBtnClickWhileBlockSelected({
-			domObj: document,
-			select,
-			setAttributes,
-		});
-		return () => {
-			cleanUp();
-		};
-	}, []);
+	// // this useEffect is to mimmik css for responsive preview in the editor page when clicking the buttons in the 'Preview button of wordpress' located beside the 'update' button while any block is selected and it's inspector panel is mounted in the DOM
+	// useEffect(() => {
+	// 	const cleanUp = mimmikCssOnPreviewBtnClickWhileBlockSelected({
+	// 		domObj: document,
+	// 		select,
+	// 		setAttributes,
+	// 	});
+	// 	return () => {
+	// 		cleanUp();
+	// 	};
+	// }, []);
 
 	const resRequiredProps = {
 		setAttributes,
@@ -125,17 +146,17 @@ const Inspector = ({ attributes, setAttributes }) => {
 						tabs={[
 							{
 								name: "general",
-								title: "General",
+								title: __("General", "instagram-block"),
 								className: "eb-tab general",
 							},
 							{
 								name: "styles",
-								title: "Styles",
+								title: __("Style", "instagram-block"),
 								className: "eb-tab styles",
 							},
 							{
 								name: "advance",
-								title: "Advance",
+								title: __("Advanced", "instagram-block"),
 								className: "eb-tab advance",
 							},
 						]}
@@ -247,6 +268,28 @@ const Inspector = ({ attributes, setAttributes }) => {
 																	})
 																}
 															/>
+															{showProfileImg && !profileImg && (
+																<MediaUpload
+																	onSelect={({ id, url }) =>
+																		setAttributes({
+																			profileImg: url,
+																			imageID: id,
+																		})
+																	}
+																	type="image"
+																	value={imageID}
+																	render={({ open }) => {
+																		return (
+																			<Button
+																				className="eb-background-control-inspector-panel-img-btn components-button"
+																				label={__("Upload Image", "instagram-block")}
+																				icon="format-image"
+																				onClick={open}
+																			/>
+																		);
+																	}}
+																/>
+															)}
 															{showProfileImg && profileImg && (
 																<ImageAvatar
 																	imageUrl={profileImg}
@@ -392,25 +435,27 @@ const Inspector = ({ attributes, setAttributes }) => {
 												/>
 											</>
 										</PanelBody>
-										<PanelBody
-											title={__("Header", "instagram-block")}
-											initialOpen={false}
-										>
-											<>
-												<TypographyDropdown
-													baseLabel={__("Typography", "instagram-block")}
-													typographyPrefixConstant={typoPrefix_header}
-													resRequiredProps={resRequiredProps}
-												/>
-												<ColorControl
-													label={__("Color", "instagram-block")}
-													color={headerColor}
-													onChange={(headerColor) =>
-														setAttributes({ headerColor })
-													}
-												/>
-											</>
-										</PanelBody>
+										{layout === "card" && (
+											<PanelBody
+												title={__("Header", "instagram-block")}
+												initialOpen={false}
+											>
+												<>
+													<TypographyDropdown
+														baseLabel={__("Typography", "instagram-block")}
+														typographyPrefixConstant={typoPrefix_header}
+														resRequiredProps={resRequiredProps}
+													/>
+													<ColorControl
+														label={__("Color", "instagram-block")}
+														color={headerColor}
+														onChange={(headerColor) =>
+															setAttributes({ headerColor })
+														}
+													/>
+												</>
+											</PanelBody>
+										)}
 									</>
 								)}
 								{tab.name === "advance" && (

@@ -1,23 +1,42 @@
-const { __ } = wp.i18n;
-const { useState, useEffect } = wp.element;
-const { Spinner, Toolbar, ToolbarButton } = wp.components;
-const { useBlockProps, BlockControls, MediaUpload } = wp.blockEditor;
-const { select } = wp.data;
+import { __ } from "@wordpress/i18n";
+import { useState, useEffect } from "@wordpress/element";
+import {
+	useBlockProps,
+	BlockControls,
+	MediaUpload,
+} from "@wordpress/block-editor";
+import { Spinner, ToolbarGroup, ToolbarButton } from "@wordpress/components";
+import { select } from "@wordpress/data";
 /**
  * Internal Import
  */
-import "./editor.scss";
+import classnames from "classnames";
+
 import Inspector from "./inspector";
-import {
+
+// import {
+// 	softMinifyCssStrings,
+// 	mimmikCssForPreviewBtnClick,
+// 	duplicateBlockIdFix,
+// 	generateDimensionsControlStyles,
+// 	generateBorderShadowStyles,
+// 	generateTypographyStyles,
+// 	generateResponsiveRangeStyles,
+// } from "../../../util/helpers";
+
+const {
 	softMinifyCssStrings,
-	isCssExists,
-	mimmikCssForPreviewBtnClick,
 	duplicateBlockIdFix,
 	generateDimensionsControlStyles,
 	generateBorderShadowStyles,
 	generateTypographyStyles,
 	generateResponsiveRangeStyles,
-} from "../util/helpers";
+} = window.EBInstagramFeedControls;
+
+const editorStoreForGettingPreivew =
+	eb_style_handler.editor_type === "edit-site"
+		? "core/edit-site"
+		: "core/edit-post";
 
 import {
 	NUMBER_OF_COLUMNS,
@@ -33,7 +52,7 @@ import {
 } from "./constants/typographyPrefixConstants";
 
 const edit = (props) => {
-	const { attributes, setAttributes, clientId, isSelected } = props;
+	const { attributes, setAttributes, className, clientId, isSelected } = props;
 	const {
 		blockId,
 		blockMeta,
@@ -292,15 +311,15 @@ const edit = (props) => {
 		}
 	`;
 
-	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 	useEffect(() => {
+		// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 		setAttributes({
-			resOption: select("core/edit-post").__experimentalGetPreviewDeviceType(),
+			resOption: select(
+				editorStoreForGettingPreivew
+			).__experimentalGetPreviewDeviceType(),
 		});
-	}, []);
 
-	// this useEffect is for creating an unique id for each block's unique className by a random unique number
-	useEffect(() => {
+		// this useEffect is for creating an unique id for each block's unique className by a random unique number
 		const BLOCK_PREFIX = "eb-instagram-feed";
 		duplicateBlockIdFix({
 			BLOCK_PREFIX,
@@ -309,33 +328,38 @@ const edit = (props) => {
 			select,
 			clientId,
 		});
-	}, []);
 
-	// this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
-	useEffect(() => {
-		mimmikCssForPreviewBtnClick({
-			domObj: document,
-			select,
-		});
+		// // this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
+		// mimmikCssForPreviewBtnClick({
+		// 	domObj: document,
+		// 	select,
+		// });
+
+		// get default profileImg
+		if (!profileImg) {
+			setAttributes({
+				profileImg: `${EssentialBlocksLocalize.eb_plugins_url}assets/images/user.png`,
+			});
+		}
 	}, []);
 
 	const blockProps = useBlockProps({
-		className: `eb-guten-block-main-parent-wrapper`,
+		className: classnames(className, `eb-guten-block-main-parent-wrapper`),
 	});
 
 	// all css styles for large screen width (desktop/laptop) in strings ⬇
 	const desktopAllStyles = softMinifyCssStrings(`
-		${isCssExists(desktopStyles) ? desktopStyles : " "}
+		${desktopStyles}
 	`);
 
 	// all css styles for Tab in strings ⬇
 	const tabAllStyles = softMinifyCssStrings(`
-		${isCssExists(tabStyles) ? tabStyles : " "}
+		${tabStyles}
 	`);
 
 	// all css styles for Mobile in strings ⬇
 	const mobileAllStyles = softMinifyCssStrings(`
-		${isCssExists(mobileStyles) ? mobileStyles : " "}
+		${mobileStyles}
 	`);
 	// Set All Style in "blockMeta" Attribute
 	useEffect(() => {
@@ -489,7 +513,7 @@ const edit = (props) => {
 			container = (
 				<p>
 					<Spinner />
-					{__("Loading feed")}
+					{__("Loading feed", "instagram-block")}
 				</p>
 			);
 		} else {
@@ -539,7 +563,7 @@ const edit = (props) => {
 										</div>
 										{showMeta && (
 											<div className="eb-instagram-meta">
-												<span class="dashicons dashicons-clock"></span>
+												<span className="dashicons dashicons-clock"></span>
 												<span className="eb-instagram-date">
 													{dateFormat(photo.timestamp)}
 												</span>
@@ -577,82 +601,88 @@ const edit = (props) => {
 		);
 	}
 
-	return [
-		isSelected && (
-			<Inspector
-				key="inspector"
-				attributes={attributes}
-				setAttributes={setAttributes}
-			/>
-		),
-		<BlockControls>
-			<Toolbar label={__("Options", "instagram-block")}>
-				<MediaUpload
-					onSelect={(media) =>
-						setAttributes({
-							profileImg: media.url,
-							imageID: media.id,
-						})
-					}
-					allowedTypes={["image"]}
-					value={imageID}
-					render={({ open }) => (
-						<ToolbarButton
-							className="components-toolbar__control"
-							label={__("Edit Profile Image", "instagram-block")}
-							icon="edit"
-							onClick={open}
-						/>
-					)}
+	return (
+		<>
+			{isSelected && (
+				<Inspector
+					key="inspector"
+					attributes={attributes}
+					setAttributes={setAttributes}
 				/>
-			</Toolbar>
-		</BlockControls>,
-		<div {...blockProps}>
-			<style>
-				{`
-				 ${desktopAllStyles}
- 
-				 /* mimmikcssStart */
- 
-				 ${resOption === "Tablet" ? tabAllStyles : " "}
-				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
- 
-				 /* mimmikcssEnd */
- 
-				 @media all and (max-width: 1024px) {	
- 
-					 /* tabcssStart */			
-					 ${softMinifyCssStrings(tabAllStyles)}
-					 /* tabcssEnd */			
-				 
-				 }
-				 
-				 @media all and (max-width: 767px) {
-					 
-					 /* mobcssStart */			
-					 ${softMinifyCssStrings(mobileAllStyles)}
-					 /* mobcssEnd */			
-				 
-				 }
-				 `}
-			</style>
-
-			<div className={`eb-instagram-wrapper ${blockId}`}>
-				<div className={`eb-instagram__gallery${loading ? " hide" : ""}`}>
-					{container}
-				</div>
-				{loading ? (
+			)}
+			{layout === "card" && showProfileImg && (
+				<BlockControls>
 					<>
-						<p>
-							<Spinner />
-							{__("Loading feed")}
-						</p>
+						<ToolbarGroup>
+							<MediaUpload
+								onSelect={(media) =>
+									setAttributes({
+										profileImg: media.url,
+										imageID: media.id,
+									})
+								}
+								allowedTypes={["image"]}
+								value={imageID}
+								render={({ open }) => (
+									<ToolbarButton
+										className="components-toolbar__control"
+										label={__("Edit Profile Image", "instagram-block")}
+										icon="edit"
+										onClick={open}
+									/>
+								)}
+							/>
+						</ToolbarGroup>
 					</>
-				) : (
-					""
-				)}
+				</BlockControls>
+			)}
+			<div {...blockProps}>
+				<style>
+					{`
+			 ${desktopAllStyles}
+
+			 /* mimmikcssStart */
+
+			 ${resOption === "Tablet" ? tabAllStyles : " "}
+			 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
+
+			 /* mimmikcssEnd */
+
+			 @media all and (max-width: 1024px) {	
+
+				 /* tabcssStart */			
+				 ${softMinifyCssStrings(tabAllStyles)}
+				 /* tabcssEnd */			
+			 
+			 }
+			 
+			 @media all and (max-width: 767px) {
+				 
+				 /* mobcssStart */			
+				 ${softMinifyCssStrings(mobileAllStyles)}
+				 /* mobcssEnd */			
+			 
+			 }
+			 `}
+				</style>
+
+				<div className={`eb-instagram-wrapper ${blockId}`}>
+					<div className={`eb-instagram__gallery${loading ? " hide" : ""}`}>
+						{container}
+					</div>
+					{loading ? (
+						<>
+							<p>
+								<Spinner />
+								{__("Loading feed", "instagram-block")}
+							</p>
+						</>
+					) : (
+						""
+					)}
+				</div>
 			</div>
-		</div>,
-	];
+		</>
+	);
 };
 export default edit;
