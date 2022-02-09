@@ -1,12 +1,12 @@
-const { __ } = wp.i18n;
+import { __ } from "@wordpress/i18n";
 
 export const SORT_OPTIONS = [
-	{ label: __("Most Recent"), value: "most_recent" },
-	{ label: __("Least Recent"), value: "least_recent" },
-	// { label: __("Most Liked"), value: "most_liked" },
-	// { label: __("Least Liked"), value: "least_liked" },
-	// { label: __("Most Commented"), value: "most_commented" },
-	// { label: __("Least Commented"), value: "least_commented" },
+	{ label: __("Most Recent", "instagram-block"), value: "most_recent" },
+	{ label: __("Least Recent", "instagram-block"), value: "least_recent" },
+	// { label: __("Most Liked", "instagram-block"), value: "most_liked" },
+	// { label: __("Least Liked", "instagram-block"), value: "least_liked" },
+	// { label: __("Most Commented", "instagram-block"), value: "most_commented" },
+	// { label: __("Least Commented", "instagram-block"), value: "least_commented" },
 ];
 
 export const LAYOUT = [

@@ -6,12 +6,20 @@ import {
 	WRAPPER_PADDING,
 } from "./constants";
 import * as typoPrefixs from "./constants/typographyPrefixConstants";
-import {
+
+// import {
+// 	generateTypographyAttributes,
+// 	generateResponsiveRangeAttributes,
+// 	generateDimensionsAttributes,
+// 	generateBorderShadowAttributes,
+// } from "../../../util/helpers";
+
+const {
 	generateTypographyAttributes,
 	generateResponsiveRangeAttributes,
 	generateDimensionsAttributes,
 	generateBorderShadowAttributes,
-} from "../util/helpers";
+} = window.EBInstagramFeedControls;
 
 const attributes = {
 	// the following 4 attributes is must required for responsive options and asset generation for frontend

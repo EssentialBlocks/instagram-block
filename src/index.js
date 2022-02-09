@@ -1,24 +1,26 @@
-const { registerBlockType } = wp.blocks;
-const { __ } = wp.i18n;
+/**
+ * WordPress dependencies
+ */
+import { __ } from "@wordpress/i18n";
 
-import "./style.scss";
+/**
+ * Internal dependencies
+ */
 import Edit from "./edit";
-import { InstagramIcon } from "./icons";
-import attributes from "./attributes";
 import example from "./example";
+import metadata from "../block.json";
+import "./style.scss";
+import attributes from "./attributes";
+import { InstagramIcon } from "./icon";
+const { ebConditionalRegisterBlockType } = EBInstagramFeedControls;
 
-registerBlockType("instagram-block/instagram-feed-block", {
-	title: __("Instagram Feed", "instagram-block"),
-	description: __(
-		"Showcase Instagram posts for your web visitors",
-		"instagram-block"
-	),
-	category: "widgets",
+ebConditionalRegisterBlockType(metadata, {
 	icon: InstagramIcon,
 	attributes,
-	supports: {
-		align: ["wide", "full"],
-	},
+	keywords: [
+		__("Instagram Feed", "instagram-block"),
+		__("eb Instagram Feed", "instagram-block"),
+	],
 	edit: Edit,
 	save: () => null,
 	example,
