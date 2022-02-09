@@ -58,7 +58,7 @@ function eb_instagram_render_callback(array $attributes)
 			'showMeta' => true,
 			'enableLink' => false,
 			'openInNewTab' => false,
-			'profileImg' => '',
+			'profileImg' => '../wp-content/plugins/instagram-block/assets/images/user.png',
 			'profileName' => '',
 			'align' => '',
 		]

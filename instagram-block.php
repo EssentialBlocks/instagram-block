@@ -20,52 +20,52 @@
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/applying-styles-with-stylesheets/
  */
 
-define('INSTAGRAM_BLOCK_ASSETS', plugin_dir_url(__FILE__) . "assets/");
+define('EB_INSTAGRAM_BLOCK_ASSETS', plugin_dir_url(__FILE__) . "assets/");
+define('EB_INSTAGRAM_BLOCK_VERSION', "1.1.0");
+define('EB_INSTAGRAM_BLOCK_ADMIN_URL', plugin_dir_url(__FILE__));
+define('EB_INSTAGRAM_BLOCK_ADMIN_PATH', dirname(__FILE__));
 
 require_once __DIR__ . '/lib/style-handler/style-handler.php';
 require_once __DIR__ . '/includes/admin-enqueue.php';
 require_once __DIR__ . '/includes/server.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 
 function eb_instagram_feed_block_init()
 {
-  $dir = dirname(__FILE__);
 
-  $script_asset_path = "$dir/build/index.asset.php";
+  $script_asset_path = EB_INSTAGRAM_BLOCK_ADMIN_PATH . "/dist/index.asset.php";
   if (!file_exists($script_asset_path)) {
     throw new Error(
       'You need to run `npm start` or `npm run build` for the "instagram-feed/instagram-feed-block" block first.'
     );
   }
 
-  $index_js     = 'build/index.js';
+  $index_js = EB_INSTAGRAM_BLOCK_ADMIN_URL . 'dist/index.js';
+  $script_asset = require($script_asset_path);
+  $all_dependencies = array_merge($script_asset['dependencies'], array(
+    'wp-blocks',
+    'wp-i18n',
+    'wp-element',
+    'wp-block-editor',
+    'eb-instagram-block-controls-util'
+  ));
+
   wp_register_script(
     'eb-instagram-feed-block-editor',
-    plugins_url($index_js, __FILE__),
-    array(
-      'wp-blocks',
-      'wp-i18n',
-      'wp-element',
-      'wp-block-editor',
-    ),
-    filemtime("$dir/$index_js")
+    $index_js,
+    $all_dependencies,
+    $script_asset['version']
   );
 
-  $editor_css = 'build/index.css';
+  $editor_css = 'dist/style.css';
   wp_register_style(
-    'eb-instagram-feed-block-editor',
+    'eb-instagram-feed-block-editor-style',
     plugins_url($editor_css, __FILE__),
     array(),
-    filemtime("$dir/$editor_css")
+    filemtime(EB_INSTAGRAM_BLOCK_ADMIN_PATH . "/$editor_css")
   );
 
-  $style_css = 'build/style-index.css';
-  wp_register_style(
-    'eb-instagram-feed-block-style',
-    plugins_url($style_css, __FILE__),
-    array(),
-    filemtime("$dir/$style_css")
-  );
 
   // isotope
   $isotope_js = "assets/js/isotope.pkgd.min.js";
@@ -73,7 +73,7 @@ function eb_instagram_feed_block_init()
     'eb-isotope',
     plugins_url($isotope_js, __FILE__),
     array(),
-    filemtime("$dir/$isotope_js"),
+    filemtime(EB_INSTAGRAM_BLOCK_ADMIN_PATH . "/$isotope_js"),
     true
   );
 
@@ -83,7 +83,7 @@ function eb_instagram_feed_block_init()
     'eb-imageloaded',
     plugins_url($imageloaded_js, __FILE__),
     array(),
-    filemtime("$dir/$imageloaded_js"),
+    filemtime(EB_INSTAGRAM_BLOCK_ADMIN_PATH . "/$imageloaded_js"),
     true
   );
 
@@ -96,87 +96,105 @@ function eb_instagram_feed_block_init()
       'eb-isotope',
       'eb-imageloaded',
     ),
-    filemtime("$dir/$eb_instagram_js")
+    filemtime(EB_INSTAGRAM_BLOCK_ADMIN_PATH . "/$eb_instagram_js")
   );
 
+  $frontend_js_path = include_once dirname(__FILE__) . "/dist/frontend/index.asset.php";
+  $frontend_js = "dist/frontend/index.js";
+  wp_register_script(
+    'eb-instagram-feed-block-script',
+    plugins_url($frontend_js, __FILE__),
+    array_merge([
+      'eb-isotope',
+      'eb-imageloaded',
+    ], $frontend_js_path['dependencies']),
+    $frontend_js_path['version'],
+    true
+  );
+
+
+
   if (!WP_Block_Type_Registry::get_instance()->is_registered('essential-blocks/instagram-feed')) {
-    register_block_type('instagram-block/instagram-feed-block', array(
-      'editor_script' => 'eb-instagram-feed-block-editor',
-      'editor_style' => 'eb-instagram-feed-block-editor',
-      'style'         => 'eb-instagram-feed-block-style',
-      'render_callback' => 'eb_instagram_render_callback',
-      'attributes' => array(
-        'blockId' => array(
-          'type' => "string",
+    register_block_type(
+      EB_Instagram_Helper::get_block_register_path('instagram-block/instagram-feed-block', EB_INSTAGRAM_BLOCK_ADMIN_PATH),
+      array(
+        'editor_script' => 'eb-instagram-feed-block-editor',
+        'editor_style' => 'eb-instagram-feed-block-editor-style',
+        'style' => 'eb-instagram-feed-block-editor-style',
+        'render_callback' => 'eb_instagram_render_callback',
+        'attributes' => array(
+          'blockId' => array(
+            'type' => "string",
+          ),
+          'layout' => array(
+            'type' => "string",
+            'default' => "overlay",
+          ),
+          'overlayStyle' => array(
+            'type' => "string",
+            'default' => "overlay__simple",
+          ),
+          'cardStyle' => array(
+            'type' => "string",
+            'default' => "content__outter",
+          ),
+          'token' => array(
+            'type' => 'string',
+            'default' => '',
+          ),
+          'columns' => array(
+            'type' => 'number',
+            'default' => "4",
+          ),
+          'numberOfImages' => array(
+            'type' => 'number',
+            'default' => 6,
+          ),
+          'thumbs' => array(
+            'type' => 'array',
+            'default' => [],
+          ),
+          'hasEqualImages' => array(
+            'type' => 'boolean',
+            'default' => true,
+          ),
+          'showCaptions' => array(
+            'type' => 'boolean',
+            'default' => true,
+          ),
+          'showProfileName' => array(
+            'type' => 'boolean',
+            'default' => true,
+          ),
+          'showProfileImg' => array(
+            'type' => 'boolean',
+            'default' => true,
+          ),
+          'profileImg' => array(
+            'type' => 'string',
+          ),
+          'profileName' => array(
+            'type' => 'string',
+          ),
+          'showMeta' => array(
+            'type' => 'boolean',
+            'default' => true,
+          ),
+          'enableLink' => array(
+            'type' => 'boolean',
+            'default' => false,
+          ),
+          'openInNewTab' => array(
+            'type' => 'boolean',
+            'default' => false,
+          ),
+          'sortBy' => array(
+            'type' => "string",
+            'default' => "most_recent",
+          ),
         ),
-        'layout' => array(
-          'type' => "string",
-          'default' => "overlay",
-        ),
-        'overlayStyle' => array(
-          'type' => "string",
-          'default' => "overlay__simple",
-        ),
-        'cardStyle' => array(
-          'type' => "string",
-          'default' => "content__outter",
-        ),
-        'token' => array(
-          'type' => 'string',
-          'default' => '',
-        ),
-        'columns' => array(
-          'type' => 'number',
-          'default' => "4",
-        ),
-        'numberOfImages' => array(
-          'type' => 'number',
-          'default' => 6,
-        ),
-        'thumbs' => array(
-          'type' => 'array',
-          'default' => [],
-        ),
-        'hasEqualImages' => array(
-          'type' => 'boolean',
-          'default' => true,
-        ),
-        'showCaptions' => array(
-          'type' => 'boolean',
-          'default' => true,
-        ),
-        'showProfileName' => array(
-          'type' => 'boolean',
-          'default' => true,
-        ),
-        'showProfileImg' => array(
-          'type' => 'boolean',
-          'default' => true,
-        ),
-        'profileImg' => array(
-          'type' => 'string',
-        ),
-        'profileName' => array(
-          'type' => 'string',
-        ),
-        'showMeta' => array(
-          'type' => 'boolean',
-          'default' => true,
-        ),
-        'enableLink' => array(
-          'type' => 'boolean',
-          'default' => false,
-        ),
-        'openInNewTab' => array(
-          'type' => 'boolean',
-          'default' => false,
-        ),
-        'sortBy' => array(
-          'type' => "string",
-          'default' => "most_recent",
-        ),
-      ),
-    ));
+      )
+    );
   }
 }
 add_action('init', 'eb_instagram_feed_block_init');

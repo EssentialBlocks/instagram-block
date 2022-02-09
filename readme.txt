@@ -83,6 +83,11 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
+== dev ==
+* Fixed: Block Base theme support
+* Improved: Font Library Updated
+* Improved: Controls and structure
+
 = 1.1.0 05/09/2021 =
 * Added: Sorting option
 * Added: Layout option
