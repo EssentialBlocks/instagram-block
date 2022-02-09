@@ -2,8 +2,8 @@
 
 /**
  * Plugin Name:     Instagram Block
- * Description:     Showcase Instagram posts for your web visitors 
- * Version:         1.0.0
+ * Description:     Showcase Instagram posts for your web visitors
+ * Version:         1.1.0
  * Author:          WPDeveloper
  * Author URI:      https://wpdeveloper.net
  * License:         GPL-3.0-or-later
@@ -21,7 +21,7 @@
  */
 
 define('EB_INSTAGRAM_BLOCK_ASSETS', plugin_dir_url(__FILE__) . "assets/");
-define('EB_INSTAGRAM_BLOCK_VERSION', "1.0.0");
+define('EB_INSTAGRAM_BLOCK_VERSION', "1.1.0");
 define('EB_INSTAGRAM_BLOCK_ADMIN_URL', plugin_dir_url(__FILE__));
 define('EB_INSTAGRAM_BLOCK_ADMIN_PATH', dirname(__FILE__));
 
