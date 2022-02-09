@@ -338,7 +338,7 @@ const edit = (props) => {
 		// get default profileImg
 		if (!profileImg) {
 			setAttributes({
-				profileImg: `${EssentialBlocksLocalize.eb_plugins_url}assets/images/user.png`,
+				profileImg: `${EBInstagramLocalize.eb_plugins_url}assets/images/user.png`,
 			});
 		}
 	}, []);

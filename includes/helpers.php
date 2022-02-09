@@ -60,6 +60,10 @@ class EB_Instagram_Helper
                 'eb_plugins_url' => EB_INSTAGRAM_BLOCK_ADMIN_URL
             ));
 
+            wp_localize_script('eb-instagram-block-controls-util', 'EBInstagramLocalize', array(
+                'eb_plugins_url' => EB_INSTAGRAM_BLOCK_ADMIN_URL
+            ));
+
             wp_enqueue_style(
                 'essential-blocks-editor-css',
                 EB_INSTAGRAM_BLOCK_ADMIN_URL . '/dist/controls.css',
