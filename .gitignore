@@ -28,3 +28,6 @@ node_modules/
 
 # MAC devices file
 .DS_Store
+
+#lock file
+yarn.lock
