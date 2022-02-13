@@ -50,3 +50,9 @@ src export-ignore
 util	export-ignore
 .wordpress-org	export-ignore
 .gitmodules export-ignore
+lib/style-handler/helpers.js export-ignore
+lib/style-handler/style-handler.js export-ignore
+lib/style-handler/gitignore export-ignore
+lib/style-handler/dist/index.js.map export-ignore
+lib/style-handler/README.md export-ignore
+dist/*.*.map export-ignore

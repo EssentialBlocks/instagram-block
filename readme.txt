@@ -83,7 +83,7 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
-= 1.2.0 - 09/02/2022 =
+= 1.2.0 - 13/02/2022 =
 * Fixed: Block Base theme support
 * Improved: Font Library Updated
 * Improved: Controls and structure
