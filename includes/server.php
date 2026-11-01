@@ -6,9 +6,9 @@
  */
 function eb_instagram_fetchData($url)
 {
-	$request = wp_remote_get($url);
+	$request = wp_remote_get($url, array('timeout' => 15));
 
-	if (is_wp_error($request)) {
+	if (is_wp_error($request) || 200 !== wp_remote_retrieve_response_code($request)) {
 		return false;
 	}
 
@@ -58,20 +58,20 @@ function eb_instagram_render_callback(array $attributes)
 			'showMeta' => true,
 			'enableLink' => false,
 			'openInNewTab' => false,
-			'profileImg' => '../wp-content/plugins/instagram-block/assets/images/user.png',
+			'profileImg' => defined('EB_INSTAGRAM_BLOCK_ASSETS') ? EB_INSTAGRAM_BLOCK_ASSETS . 'images/user.png' : '',
 			'profileName' => '',
 			'align' => '',
 		]
 	);
 
-	$token = $attributes['token'];
-	$blockId = $attributes['blockId'];
+	$token = (string) $attributes['token'];
+	$blockId = sanitize_html_class($attributes['blockId']);
 
 	$layout = $attributes['layout'];
-	$cardStyle = $attributes['cardStyle'];
-	$overlayStyle = $attributes['overlayStyle'];
+	$cardStyle = sanitize_html_class($attributes['cardStyle']);
+	$overlayStyle = sanitize_html_class($attributes['overlayStyle']);
 	$hasEqualImages = $attributes['hasEqualImages'] ? ' has__equal__height' : '';
-	$numberOfImages = $attributes['numberOfImages'];
+	$numberOfImages = (int) $attributes['numberOfImages'];
 	$sortBy = $attributes['sortBy'];
 	$showCaptions = $attributes['showCaptions'];
 	$showProfileName = $attributes['showProfileName'];
@@ -81,7 +81,7 @@ function eb_instagram_render_callback(array $attributes)
 	$openInNewTab = $attributes['openInNewTab'];
 	$profileImg = isset($attributes['profileImg']) ? $attributes['profileImg'] : '';
 	$profileName = isset($attributes['profileName']) ? $attributes['profileName'] : '';
-	$align = isset($attributes['align']) ? ' align' . $attributes['align'] : '';
+	$align = !empty($attributes['align']) ? ' align' . sanitize_html_class($attributes['align']) : '';
 
 
 	// originally we got the user id from the token but this no longer possible
@@ -91,8 +91,11 @@ function eb_instagram_render_callback(array $attributes)
 	if (!eb_instagram_get_from_cache($suffix)) {
 		// no valid cache found
 		// hit the network
-		$result = json_decode(eb_instagram_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&limit=500&access_token={$token}"));
-		eb_instagram_add_to_cache($result, $suffix); // add the result to the cache
+		$result = json_decode((string) eb_instagram_fetchData("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp,username&limit=500&access_token=" . rawurlencode($token)));
+		// Only cache a real answer, so an error response is not kept for hours.
+		if (is_object($result) && isset($result->data) && is_array($result->data)) {
+			eb_instagram_add_to_cache($result, $suffix); // add the result to the cache
+		}
 	} else {
 		$result = eb_instagram_get_from_cache($suffix); // hit the cache
 	}
@@ -123,16 +126,18 @@ function eb_instagram_render_callback(array $attributes)
 
 		foreach ($thumbs as $key => $thumb) {
 			$author_info = $meta = '';
+			$username = isset($thumb->username) ? (string) $thumb->username : '';
+			$profile_url = esc_url('//www.instagram.com/' . rawurlencode($username));
 			if ('card' === $layout && ($showProfileName || $showProfileImg)) {
 				$author_info .= '<div class="author__info">';
 				if ($showProfileImg && !empty($profileImg)) {
 					$author_info .= '<div class="author__thumb">
-							<a href="//www.instagram.com/' . $thumb->username . '" target="_blank"><img src=' . $profileImg . ' alt=' . $thumb->username . ' /></a>
+							<a href="' . $profile_url . '" target="_blank" rel="noopener noreferrer"><img src="' . esc_url($profileImg) . '" alt="' . esc_attr($username) . '" /></a>
 						</div>';
 				}
-				$author_name = !empty($profileName) ? esc_html($profileName) : $thumb->username;
+				$author_name = !empty($profileName) ? esc_html($profileName) : esc_html($username);
 				if ($showProfileName) {
-					$author_info .= '<h5 class="author__name"><a href="//www.instagram.com/' . $thumb->username . '" target="_blank">' . $author_name . '</a></h5>';
+					$author_info .= '<h5 class="author__name"><a href="' . $profile_url . '" target="_blank" rel="noopener noreferrer">' . $author_name . '</a></h5>';
 				}
 				$author_info .= '</div>';
 			}
@@ -141,27 +146,27 @@ function eb_instagram_render_callback(array $attributes)
 				$meta .= '<div class="eb-instagram-meta">
 					<span class="dashicons dashicons-clock"></span>
 					<span class="eb-instagram-date">
-						' . date("d M Y", strtotime($thumb->timestamp)) . '
+						' . esc_html(wp_date("d M Y", strtotime($thumb->timestamp))) . '
 					</span>
 				</div>';
 			}
 
-			$caption = $showCaptions && isset($thumb->caption) ? '<div class="eb-instagram-caption"><p>' . $thumb->caption . '</p></div>' : '';
+			$caption = $showCaptions && isset($thumb->caption) ? '<div class="eb-instagram-caption"><p>' . esc_html($thumb->caption) . '</p></div>' : '';
 			$media_type = esc_attr($thumb->media_type);
 			$image = esc_url($thumb->media_url);
 
 			if ($media_type === "VIDEO") {
 				$image = esc_url($thumb->thumbnail_url);
 			}
-			$imageAlt = isset($thumb->caption) ? $thumb->caption : '';
-			$target = $enableLink && $openInNewTab ? '_blank' : '';
+			$imageAlt = isset($thumb->caption) ? esc_attr($thumb->caption) : '';
+			$target = $enableLink && $openInNewTab ? ' target="_blank" rel="noopener noreferrer"' : '';
 
 			if ($key < $numberOfImages) {
 				$imageContainer .= '<div class="instagram__gallery__col">
 					<div class="instagram__gallery__item instagram__gallery__item--' . $layoutClass . $hasEqualImages . '">
 						' . $author_info;
 				if ($enableLink) {
-					$imageContainer .= '<a href="' . $thumb->permalink . '" target="' . $target . '">';
+					$imageContainer .= '<a href="' . esc_url($thumb->permalink) . '"' . $target . '>';
 				}
 				$imageContainer .= '<div class="instagram__gallery__thumb">
 				
